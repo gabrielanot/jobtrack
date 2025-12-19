@@ -73,6 +73,19 @@ class Database:
                 FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE
             )
         """)
+
+            # Resumes table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS resumes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                filename TEXT NOT NULL,
+                file_path TEXT NOT NULL,
+                upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                ats_score INTEGER,
+                ats_analysis TEXT,
+                notes TEXT
+            )
+        """)     
         
         conn.commit()
         self.close()

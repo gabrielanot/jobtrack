@@ -10,7 +10,7 @@ import sqlite3
 from contextlib import contextmanager
 
 from .database import db
-from .models import Job, JobCreate, JobUpdate
+from .models import Job, JobCreate, JobUpdate, Resume, ResumeCreate, ResumeUpdate
 
 
 # Initialize FastAPI app
@@ -209,3 +209,80 @@ def get_stats():
             "by_status": status_counts,
             "recent_activity": recent_activity
         }
+    
+# ==================== RESUME ENDPOINTS ====================
+
+@app.get("/api/resumes", response_model=List[Resume])
+def get_resumes():
+    """Get all uploaded resumes"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM resumes ORDER BY upload_date DESC")
+        resumes = cursor.fetchall()
+        return [dict(resume) for resume in resumes]
+
+
+@app.post("/api/resumes", response_model=Resume, status_code=201)
+def create_resume(resume: ResumeCreate):
+    """Register a new resume in the system"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            INSERT INTO resumes (filename, file_path, notes)
+            VALUES (?, ?, ?)
+        """, (resume.filename, resume.file_path, resume.notes))
+        
+        conn.commit()
+        resume_id = cursor.lastrowid
+        
+        cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
+        created_resume = cursor.fetchone()
+        
+        return dict(created_resume)
+
+
+@app.get("/api/resumes/{resume_id}", response_model=Resume)
+def get_resume(resume_id: int):
+    """Get a specific resume"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
+        resume = cursor.fetchone()
+        
+        if not resume:
+            raise HTTPException(status_code=404, detail="Resume not found")
+        
+        return dict(resume)
+
+
+@app.put("/api/resumes/{resume_id}", response_model=Resume)
+def update_resume(resume_id: int, resume_update: ResumeUpdate):
+    """Update resume ATS analysis"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Check if resume exists
+        cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Resume not found")
+        
+        # Build UPDATE query
+        update_fields = []
+        values = []
+        
+        for field, value in resume_update.model_dump(exclude_unset=True).items():
+            update_fields.append(f"{field} = ?")
+            values.append(value)
+        
+        if update_fields:
+            values.append(resume_id)
+            query = f"UPDATE resumes SET {', '.join(update_fields)} WHERE id = ?"
+            cursor.execute(query, values)
+            conn.commit()
+        
+        # Return updated resume
+        cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
+        updated_resume = cursor.fetchone()
+        
+        return dict(updated_resume)    

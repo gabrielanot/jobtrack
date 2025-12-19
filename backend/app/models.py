@@ -90,3 +90,32 @@ class Interview(InterviewBase):
     
     class Config:
         from_attributes = True
+
+class ResumeBase(BaseModel):
+    """Base resume model"""
+    filename: str
+    file_path: str
+    notes: Optional[str] = None
+
+
+class ResumeCreate(ResumeBase):
+    """Model for uploading a resume"""
+    pass
+
+
+class ResumeUpdate(BaseModel):
+    """Model for updating resume info"""
+    ats_score: Optional[int] = Field(None, ge=0, le=100)
+    ats_analysis: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class Resume(ResumeBase):
+    """Complete resume model"""
+    id: int
+    upload_date: datetime
+    ats_score: Optional[int] = None
+    ats_analysis: Optional[str] = None
+    
+    class Config:
+        from_attributes = True
