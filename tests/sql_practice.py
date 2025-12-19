@@ -91,5 +91,18 @@ top_companies = cursor.fetchall()
 print("Top 3 companies:")
 for company, count in top_companies:
     print(f"  - {company}: {count} jobs")
+
+# NEW FEATURE: Jobs added this month
+print("\n=== Jobs added this month ===")
+cursor.execute("""
+    SELECT company, position, date_added
+    FROM jobs
+    WHERE strftime('%Y-%m', date_added) = strftime('%Y-%m', 'now')
+    ORDER BY date_added DESC
+""")
+this_month = cursor.fetchall()
+print(f"Found {len(this_month)} jobs this month:")
+for job in this_month:
+    print(f"  - {job[0]}: {job[1]} (added {job[2]})")    
 conn.close()
 print("\n✓ Done!")
