@@ -103,6 +103,20 @@ cursor.execute("""
 this_month = cursor.fetchall()
 print(f"Found {len(this_month)} jobs this month:")
 for job in this_month:
-    print(f"  - {job[0]}: {job[1]} (added {job[2]})")    
+    print(f"  - {job[0]}: {job[1]} (added {job[2]})")
+
+# NEW FEATURE: Jobs by company
+print("\n=== Jobs by company ===")
+cursor.execute("""
+    SELECT company, COUNT(*) as count
+    FROM jobs
+    GROUP BY company
+    ORDER BY count DESC
+""")
+company_jobs = cursor.fetchall()
+print(f"Found {len(company_jobs)} companies:")
+for job in company_jobs:
+    print(f"  - {job[0]}: {job[1]} jobs")
+
 conn.close()
 print("\n✓ Done!")
