@@ -1,1 +1,0 @@
-from backend.app.database import Base, engine  # or wherever Base is defined
