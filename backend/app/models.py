@@ -4,7 +4,6 @@ Pydantic models for request/response validation
 
 from typing import Optional, List
 from datetime import date, datetime
-from typing import Optional
 from pydantic import BaseModel, Field
 
 
@@ -18,6 +17,7 @@ class JobBase(BaseModel):
     salary_max: Optional[int] = Field(None, ge=0)
     status: str = Field(default="wishlist")
     notes: Optional[str] = None
+    job_description: Optional[str] = None  # Added missing field
 
 
 class JobCreate(JobBase):
@@ -36,6 +36,7 @@ class JobUpdate(BaseModel):
     status: Optional[str] = None
     date_applied: Optional[date] = None
     notes: Optional[str] = None
+    job_description: Optional[str] = None  # Added missing field
 
 
 class Job(JobBase):
@@ -92,6 +93,7 @@ class Interview(InterviewBase):
     class Config:
         from_attributes = True
 
+
 class ResumeBase(BaseModel):
     """Base resume model"""
     filename: str
@@ -120,6 +122,7 @@ class Resume(ResumeBase):
     
     class Config:
         from_attributes = True
+
 
 # ATS Analysis Models
 class ATSAnalysisRequest(BaseModel):
@@ -150,8 +153,7 @@ class CoverLetterResponse(BaseModel):
     """Response with generated cover letter"""
     success: bool
     cover_letter: str
-    """Response model for cover letter"""
-    cover_letter: str        
+
 
 # ==================== JOB EXTRACTION MODELS ====================
 

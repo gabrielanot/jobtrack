@@ -16,6 +16,9 @@ class Database:
     
     def connect(self):
         """Establish database connection"""
+        # For :memory: databases, reuse existing connection to preserve data
+        if self.db_path == ":memory:" and self.connection:
+            return self.connection
         self.connection = sqlite3.connect(self.db_path)
         self.connection.row_factory = sqlite3.Row  # Return rows as dictionaries
         return self.connection
@@ -24,13 +27,14 @@ class Database:
         """Close database connection"""
         if self.connection:
             self.connection.close()
+            self.connection = None
     
     def initialize_schema(self):
         """Create database tables if they don't exist"""
         conn = self.connect()
         cursor = conn.cursor()
         
-        # Jobs table
+        # Jobs table (added job_description column)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS jobs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,6 +48,7 @@ class Database:
                 date_added DATE DEFAULT CURRENT_DATE,
                 date_applied DATE,
                 notes TEXT,
+                job_description TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -74,7 +79,7 @@ class Database:
             )
         """)
 
-            # Resumes table
+        # Resumes table (fixed indentation)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS resumes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -85,10 +90,11 @@ class Database:
                 ats_analysis TEXT,
                 notes TEXT
             )
-        """)     
+        """)
         
         conn.commit()
-        self.close()
+        # Don't close connection here - let caller manage it
+        # This is important for :memory: databases used in tests
         print("Database schema initialized")
 
 

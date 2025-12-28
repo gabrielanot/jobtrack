@@ -5,6 +5,7 @@ Main entry point for the API
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from typing import List
 import sqlite3
 from contextlib import contextmanager
@@ -25,11 +26,23 @@ from .ats_service import (
     fetch_and_extract_from_url
 )
 
+
+# Lifespan context manager (replaces deprecated on_event)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database on startup"""
+    db.initialize_schema()
+    yield
+    # Cleanup on shutdown (if needed)
+    db.close()
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="JobTrack API",
     description="API for tracking job applications with AI-powered features",
-    version="1.1.0"
+    version="1.1.0",
+    lifespan=lifespan
 )
 
 # Configure CORS
@@ -45,18 +58,15 @@ app.add_middleware(
 @contextmanager
 def get_db_connection():
     """Context manager for database connections"""
-    conn = sqlite3.connect(db.db_path)
+    # Use the Database class to get connection (important for :memory: DBs)
+    conn = db.connect()
     conn.row_factory = sqlite3.Row
     try:
         yield conn
     finally:
-        conn.close()
-
-
-@app.on_event("startup")
-def startup():
-    """Initialize database on app startup"""
-    db.initialize_schema()
+        # Don't close for :memory: databases (would destroy data)
+        if db.db_path != ":memory:":
+            pass  # Connection pooling handled by Database class
 
 
 @app.get("/")
