@@ -2,7 +2,7 @@
 JobTrack FastAPI Application
 Main entry point for the API
 """
-from .ats_service import analyze_resume_ats, generate_cover_letter
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
@@ -13,6 +13,16 @@ from .database import db
 from .models import (
     Job, JobCreate, JobUpdate, 
     Resume, ResumeCreate, ResumeUpdate
+    Resume, ResumeCreate, ResumeUpdate,
+    ATSAnalysisRequest, ATSAnalysisResponse,
+    CoverLetterRequest, CoverLetterResponse,
+    JobExtractRequest, JobExtractFromURLRequest, JobExtractResponse
+)
+from .ats_service import (
+    analyze_resume_ats, 
+    generate_cover_letter,
+    extract_job_details,
+    fetch_and_extract_from_url
 )
 
 from typing import List, Optional  # Add Optional!
@@ -46,14 +56,14 @@ class CoverLetterResponse(BaseModel):
 # Initialize FastAPI app
 app = FastAPI(
     title="JobTrack API",
-    description="API for tracking job applications",
-    version="1.0.0"
+    description="API for tracking job applications with AI-powered features",
+    version="1.1.0"
 )
 
-# Configure CORS (allows frontend to call API)
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your domain
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,18 +92,16 @@ def root():
     """Health check endpoint"""
     return {
         "message": "JobTrack API is running",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "docs": "/docs"
     }
 
 
+# ==================== JOB ENDPOINTS ====================
+
 @app.get("/api/jobs", response_model=List[Job])
 def get_jobs(status: str = None):
-    """
-    Get all jobs, optionally filtered by status
-    
-    - **status**: Filter by job status (wishlist, applied, interviewing, offer, rejected)
-    """
+    """Get all jobs, optionally filtered by status"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
         
@@ -108,37 +116,38 @@ def get_jobs(status: str = None):
         jobs = cursor.fetchall()
         return [dict(job) for job in jobs]
 
+@app.get("/api/jobs/with-descriptions")
+def get_jobs_with_descriptions():
+    """Get all jobs that have job descriptions saved (for ATS analyzer dropdown)"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, company, position, job_description 
+            FROM jobs 
+            WHERE job_description IS NOT NULL AND job_description != ''
+            ORDER BY date_added DESC
+        """)
+        jobs = cursor.fetchall()
+        return [dict(job) for job in jobs]
 
 @app.post("/api/jobs", response_model=Job, status_code=201)
 def create_job(job: JobCreate):
-    """
-    Create a new job application
-    
-    - **company**: Company name (required)
-    - **position**: Job position (required)
-    - **location**: Job location
-    - **job_url**: Link to job posting
-    - **salary_min**: Minimum salary
-    - **salary_max**: Maximum salary
-    - **status**: Current status (default: wishlist)
-    - **notes**: Additional notes
-    """
+    """Create a new job application"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
         
         cursor.execute("""
             INSERT INTO jobs (company, position, location, job_url, salary_min, 
-                             salary_max, status, notes)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                             salary_max, status, notes, job_description)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             job.company, job.position, job.location, job.job_url,
-            job.salary_min, job.salary_max, job.status, job.notes
+            job.salary_min, job.salary_max, job.status, job.notes, job.job_description
         ))
         
         conn.commit()
         job_id = cursor.lastrowid
         
-        # Fetch the created job
         cursor.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
         created_job = cursor.fetchone()
         
@@ -165,12 +174,10 @@ def update_job(job_id: int, job_update: JobUpdate):
     with get_db_connection() as conn:
         cursor = conn.cursor()
         
-        # Check if job exists
         cursor.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Job not found")
         
-        # Build UPDATE query dynamically for provided fields
         update_fields = []
         values = []
         
@@ -184,7 +191,6 @@ def update_job(job_id: int, job_update: JobUpdate):
             cursor.execute(query, values)
             conn.commit()
         
-        # Return updated job
         cursor.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
         updated_job = cursor.fetchone()
         
@@ -212,7 +218,6 @@ def get_stats():
     with get_db_connection() as conn:
         cursor = conn.cursor()
         
-        # Total jobs by status
         cursor.execute("""
             SELECT status, COUNT(*) as count
             FROM jobs
@@ -220,11 +225,9 @@ def get_stats():
         """)
         status_counts = {row['status']: row['count'] for row in cursor.fetchall()}
         
-        # Total jobs
         cursor.execute("SELECT COUNT(*) as total FROM jobs")
         total = cursor.fetchone()['total']
         
-        # Recent activity
         cursor.execute("""
             SELECT DATE(date_added) as date, COUNT(*) as count
             FROM jobs
@@ -239,7 +242,8 @@ def get_stats():
             "by_status": status_counts,
             "recent_activity": recent_activity
         }
-    
+
+
 # ==================== RESUME ENDPOINTS ====================
 
 @app.get("/api/resumes", response_model=List[Resume])
@@ -292,12 +296,10 @@ def update_resume(resume_id: int, resume_update: ResumeUpdate):
     with get_db_connection() as conn:
         cursor = conn.cursor()
         
-        # Check if resume exists
         cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="Resume not found")
         
-        # Build UPDATE query
         update_fields = []
         values = []
         
@@ -311,7 +313,6 @@ def update_resume(resume_id: int, resume_update: ResumeUpdate):
             cursor.execute(query, values)
             conn.commit()
         
-        # Return updated resume
         cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
         updated_resume = cursor.fetchone()
         
@@ -334,6 +335,9 @@ class CoverLetterRequest(BaseModel):
     company_name: str
     tone: str = "professional"
 
+
+
+# ==================== ATS ANALYSIS ENDPOINTS ====================
 
 # Add these endpoints with your resume endpoints
 @app.post("/api/analyze-ats")
@@ -376,6 +380,9 @@ def analyze_ats(request: ATSAnalysisRequest):
             status_code=500,
             detail=f"ATS analysis failed: {str(e)}"
         )
+    """Analyze a resume against a job description for ATS compatibility"""
+    result = analyze_resume_ats(request.resume_text, request.job_description)
+    return result
 
 
 @app.post("/api/generate-cover-letter")
@@ -403,3 +410,36 @@ def create_cover_letter(request: CoverLetterRequest):
             status_code=500,
             detail=f"Cover letter generation failed: {str(e)}"
         )        
+    """Generate a personalized cover letter"""
+    cover_letter = generate_cover_letter(
+        resume_text=request.resume_text,
+        job_description=request.job_description,
+        company_name=request.company_name,
+        tone=request.tone
+    )
+    return {"cover_letter": cover_letter}
+
+
+# ==================== JOB EXTRACTION ENDPOINTS ====================
+
+@app.post("/api/ats/extract-job", response_model=JobExtractResponse)
+def extract_job(request: JobExtractRequest):
+    """Extract job details from a job description using AI"""
+    result = extract_job_details(request.job_description)
+    return result
+
+
+@app.post("/api/ats/extract-from-url")
+def extract_from_url(request: JobExtractFromURLRequest):
+    """
+    Fetch a job posting from URL and extract details.
+    
+    Note: Won't work with LinkedIn (blocks scraping).
+    Works with: Greenhouse, Lever, Indeed, company career pages.
+    """
+    result = fetch_and_extract_from_url(request.url)
+    
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    
+    return result

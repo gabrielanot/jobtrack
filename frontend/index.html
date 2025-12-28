@@ -3,29 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobTrack - Job Application Tracker</title>
+    <title>JobTrack - Your Job Search Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>JobTrack</h1>
-            <p>Track your job applications</p>
-        </header>
-        
-        <main>
-            <section class="add-job">
-                <h2>Add New Job</h2>
-                <p>Coming soon in Week 3!</p>
-            </section>
-            
-            <section class="job-list">
-                <h2>Your Jobs</h2>
-                <p>API will be ready after Week 2</p>
-            </section>
-        </main>
-    </div>
-    
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">◆</span>
+            <span class="logo-text">JobTrack</span>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item active" data-page="dashboard"><span class="nav-icon">⌘</span><span>Dashboard</span></li>
+            <li class="nav-item" data-page="jobs"><span class="nav-icon">▤</span><span>Applications</span></li>
+            <li class="nav-item" data-page="add-job"><span class="nav-icon">+</span><span>Add Job</span></li>
+            <li class="nav-item" data-page="ats"><span class="nav-icon">◎</span><span>ATS Analyzer</span></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="api-status"><span class="status-dot"></span><span>API Connected</span></div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <section id="page-dashboard" class="page active">
+            <header class="page-header">
+                <div>
+                    <h1>Dashboard</h1>
+                    <p class="subtitle">Your job search at a glance</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="showPage('add-job')"><span>+</span> Add Application</button>
+                </div>
+            </header>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon blue">▤</div><div class="stat-info"><span class="stat-value" id="stat-total">0</span><span class="stat-label">Total Applications</span></div></div>
+                <div class="stat-card"><div class="stat-icon yellow">★</div><div class="stat-info"><span class="stat-value" id="stat-wishlist">0</span><span class="stat-label">Wishlist</span></div></div>
+                <div class="stat-card"><div class="stat-icon green">→</div><div class="stat-info"><span class="stat-value" id="stat-applied">0</span><span class="stat-label">Applied</span></div></div>
+                <div class="stat-card"><div class="stat-icon purple">◐</div><div class="stat-info"><span class="stat-value" id="stat-interviewing">0</span><span class="stat-label">Interviewing</span></div></div>
+                <div class="stat-card"><div class="stat-icon emerald">✓</div><div class="stat-info"><span class="stat-value" id="stat-offer">0</span><span class="stat-label">Offers</span></div></div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card"><h3>Applications by Status</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
+                <div class="chart-card"><h3>Activity (Last 30 Days)</h3><div class="chart-container"><canvas id="activityChart"></canvas></div></div>
+            </div>
+            <div class="recent-section">
+                <div class="section-header"><h3>Recent Applications</h3><button class="btn btn-secondary" onclick="showPage('jobs')">View All</button></div>
+                <div class="jobs-list" id="recent-jobs"></div>
+            </div>
+        </section>
+
+        <!-- Jobs List Page -->
+        <section id="page-jobs" class="page">
+            <header class="page-header">
+                <div><h1>Applications</h1><p class="subtitle">Track all your job applications</p></div>
+                <div class="header-actions">
+                    <select id="filter-status" class="filter-select" onchange="filterJobs()">
+                        <option value="">All Status</option>
+                        <option value="wishlist">Wishlist</option>
+                        <option value="applied">Applied</option>
+                        <option value="interviewing">Interviewing</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="showPage('add-job')"><span>+</span> Add Application</button>
+                </div>
+            </header>
+            <div class="jobs-table-container">
+                <table class="jobs-table">
+                    <thead><tr><th>Company</th><th>Position</th><th>Location</th><th>Salary Range</th><th>Status</th><th>Date Added</th><th>Actions</th></tr></thead>
+                    <tbody id="jobs-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Add Job Page -->
+        <section id="page-add-job" class="page">
+            <header class="page-header">
+                <div><h1>Add Application</h1><p class="subtitle">Add a job from URL or paste the description</p></div>
+            </header>
+            <div class="add-job-container">
+                <div class="form-section" id="step-paste">
+                    <div class="section-header"><span class="step-number">1</span><h3>Enter Job Information</h3></div>
+                    
+                    <div class="input-option">
+                        <label>Option A: Paste Job URL</label>
+                        <p class="input-hint">Works with Greenhouse, Lever, Indeed, company career pages. LinkedIn blocks automated access.</p>
+                        <div class="url-input-group">
+                            <input type="url" id="job-url-input" class="url-input" placeholder="https://jobs.lever.co/company/position...">
+                            <button class="btn btn-secondary" onclick="extractFromURL()">Extract from URL</button>
+                        </div>
+                    </div>
+                    
+                    <div class="option-divider"><span>OR</span></div>
+                    
+                    <div class="input-option">
+                        <label>Option B: Paste Job Description</label>
+                        <textarea id="job-description-input" class="job-description-textarea" placeholder="Paste the full job description here..."></textarea>
+                        <div class="form-actions">
+                            <button class="btn btn-primary btn-large" onclick="extractJobDetails()"><span class="btn-icon">◎</span> Extract Details with AI</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section hidden" id="step-review">
+                    <div class="section-header"><span class="step-number">2</span><h3>Review & Edit Details</h3></div>
+                    <form id="job-form" class="job-form">
+                        <div class="form-row">
+                            <div class="form-group"><label for="company">Company *</label><input type="text" id="company" name="company" required></div>
+                            <div class="form-group"><label for="position">Position *</label><input type="text" id="position" name="position" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label for="location">Location</label><input type="text" id="location" name="location"></div>
+                            <div class="form-group"><label for="job_url">Job URL</label><input type="url" id="job_url" name="job_url" placeholder="https://..."></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label for="salary_min">Min Salary ($)</label><input type="number" id="salary_min" name="salary_min" placeholder="100000"></div>
+                            <div class="form-group"><label for="salary_max">Max Salary ($)</label><input type="number" id="salary_max" name="salary_max" placeholder="150000"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select id="status" name="status">
+                                    <option value="wishlist">Wishlist</option>
+                                    <option value="applied">Applied</option>
+                                    <option value="interviewing">Interviewing</option>
+                                    <option value="offer">Offer</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group full-width"><label for="notes">Notes</label><textarea id="notes" name="notes" rows="3" placeholder="Any additional notes..."></textarea></div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="resetAddJob()">Start Over</button>
+                            <button type="submit" class="btn btn-primary btn-large"><span class="btn-icon">✓</span> Save Application</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ATS Analyzer Page -->
+        <section id="page-ats" class="page">
+            <header class="page-header">
+                <div><h1>ATS Analyzer</h1><p class="subtitle">Optimize your resume for any job posting</p></div>
+            </header>
+            <div class="ats-container">
+                <div class="ats-input-section">
+                    <div class="form-group">
+                        <label for="resume-text">Your Resume</label>
+                        <textarea id="resume-text" class="resume-textarea" placeholder="Paste your resume text here..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="job-desc-ats">Job Description</label>
+                        <div class="saved-jobs-section" id="saved-jobs-section">
+                            <div class="saved-jobs-header">
+                                <span>Load from saved jobs:</span>
+                                <select id="saved-job-select" class="filter-select" onchange="loadSavedJobDescription()">
+                                    <option value="">-- Select a saved job --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea id="job-desc-ats" class="resume-textarea" placeholder="Paste the job description or select from saved jobs above..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary btn-large" onclick="analyzeATS()"><span class="btn-icon">◎</span> Analyze Resume</button>
+                    </div>
+                </div>
+
+                <div class="ats-results-section hidden" id="ats-results">
+                    <div class="ats-score-card">
+                        <div class="score-circle"><span class="score-value" id="ats-score-value">0</span><span class="score-label">ATS Score</span></div>
+                    </div>
+                    <div class="ats-details-card"><h4>Missing Keywords</h4><div class="keywords-list" id="missing-keywords"></div></div>
+                    <div class="ats-details-card"><h4>Suggestions</h4><ul class="suggestions-list" id="suggestions-list"></ul></div>
+                    <div class="ats-details-card"><h4>Summary</h4><p id="ats-summary"></p></div>
+                    <div class="cover-letter-section">
+                        <h4>Generate Cover Letter</h4>
+                        <div class="form-row">
+                            <div class="form-group"><label for="company-name-cl">Company Name</label><input type="text" id="company-name-cl" placeholder="e.g., Google"></div>
+                            <div class="form-group"><label for="tone-cl">Tone</label><select id="tone-cl"><option value="professional">Professional</option><option value="enthusiastic">Enthusiastic</option><option value="conversational">Conversational</option></select></div>
+                        </div>
+                        <button class="btn btn-secondary btn-large" onclick="generateCoverLetter()"><span class="btn-icon">✎</span> Generate Cover Letter</button>
+                        <div class="cover-letter-output hidden" id="cover-letter-output">
+                            <h4>Your Cover Letter</h4>
+                            <div class="cover-letter-text" id="cover-letter-text"></div>
+                            <button class="btn btn-secondary" onclick="copyCoverLetter()">Copy to Clipboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Modal -->
+        <div class="modal hidden" id="job-modal">
+            <div class="modal-backdrop" onclick="closeModal()"></div>
+            <div class="modal-content">
+                <div class="modal-header"><h2 id="modal-title">Job Details</h2><button class="modal-close" onclick="closeModal()">×</button></div>
+                <div class="modal-body" id="modal-body"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="loading-overlay hidden" id="loading"><div class="loading-spinner"></div><p>Processing with AI...</p></div>
+    <div class="toast-container" id="toast-container"></div>
     <script src="app.js"></script>
 </body>
 </html>
