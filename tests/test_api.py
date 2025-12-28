@@ -3,6 +3,8 @@ API Tests for JobTrack
 """
 
 import pytest
+import tempfile
+import os
 from fastapi.testclient import TestClient
 from backend.app.main import app
 from backend.app.database import db
@@ -10,13 +12,26 @@ from backend.app.database import db
 
 @pytest.fixture
 def client():
-    """Create a test client"""
-    # Use in-memory database for tests
-    db.db_path = ":memory:"
-    db.initialize_schema()
+    """Create a test client with a temporary database"""
+    # Create a temporary file for the test database
+    fd, temp_db_path = tempfile.mkstemp(suffix=".db")
+    os.close(fd)  # Close the file descriptor, we just need the path
+    
+    # Configure database to use temp file
+    original_db_path = db.db_path
+    db.db_path = temp_db_path
+    db._schema_initialized = False  # Reset so schema gets created
     
     with TestClient(app) as test_client:
         yield test_client
+    
+    # Cleanup: restore original path and remove temp file
+    db.db_path = original_db_path
+    db._schema_initialized = False
+    try:
+        os.unlink(temp_db_path)
+    except OSError:
+        pass
 
 
 def test_root(client):
@@ -117,3 +132,4 @@ def test_get_stats(client):
     data = response.json()
     assert "total_jobs" in data
     assert "by_status" in data
+    

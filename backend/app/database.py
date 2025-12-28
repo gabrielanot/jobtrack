@@ -12,29 +12,30 @@ class Database:
     
     def __init__(self, db_path: str = "jobtrack.db"):
         self.db_path = db_path
-        self.connection: Optional[sqlite3.Connection] = None
+        self._schema_initialized = False
     
     def connect(self):
         """Establish database connection"""
-        # For :memory: databases, reuse existing connection to preserve data
-        if self.db_path == ":memory:" and self.connection:
-            return self.connection
-        self.connection = sqlite3.connect(self.db_path)
-        self.connection.row_factory = sqlite3.Row  # Return rows as dictionaries
-        return self.connection
+        # check_same_thread=False allows connection to be used across threads
+        # This is safe for our use case since we commit after each operation
+        conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        conn.row_factory = sqlite3.Row  # Return rows as dictionaries
+        return conn
     
     def close(self):
-        """Close database connection"""
-        if self.connection:
-            self.connection.close()
-            self.connection = None
+        """Close database connection (no-op now since we don't cache)"""
+        pass
     
     def initialize_schema(self):
         """Create database tables if they don't exist"""
+        # Avoid re-initializing if already done (except for memory DBs)
+        if self._schema_initialized and self.db_path != ":memory:":
+            return
+            
         conn = self.connect()
         cursor = conn.cursor()
         
-        # Jobs table (added job_description column)
+        # Jobs table (with job_description column)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS jobs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,7 +80,7 @@ class Database:
             )
         """)
 
-        # Resumes table (fixed indentation)
+        # Resumes table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS resumes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -93,8 +94,8 @@ class Database:
         """)
         
         conn.commit()
-        # Don't close connection here - let caller manage it
-        # This is important for :memory: databases used in tests
+        conn.close()
+        self._schema_initialized = True
         print("Database schema initialized")
 
 
@@ -109,3 +110,4 @@ def get_db():
         yield connection
     finally:
         connection.close()
+        
