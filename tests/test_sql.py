@@ -1,17 +1,40 @@
-import sqlite3
+import pytest
+from backend.app.database import Database
 
-conn = sqlite3.connect('jobtrack.db')
-cursor = conn.cursor()
 
-cursor.execute("SELECT COUNT(*) FROM jobs")
-total = cursor.fetchone()[0]
-print(f"Total jobs: {total}")
+def test_database_schema():
+    """Test that database schema initializes correctly"""
+    db = Database(":memory:")
+    db.initialize_schema()
+    conn = db.connect()
+    cursor = conn.cursor()
+    
+    # Verify jobs table exists
+    cursor.execute("SELECT COUNT(*) FROM jobs")
+    total = cursor.fetchone()[0]
+    assert total == 0  # Empty table after init
+    
+    db.close()
 
-cursor.execute("SELECT company, position FROM jobs LIMIT 5")
-jobs = cursor.fetchall()
-print("\nFirst 5 jobs:")
-for job in jobs:
-    print(f"  - {job[0]}: {job[1]}")
 
-conn.close()
-input("\nPress Enter to exit...")
+def test_tables_exist():
+    """Test that all required tables are created"""
+    db = Database(":memory:")
+    db.initialize_schema()
+    conn = db.connect()
+    cursor = conn.cursor()
+    
+    # Check all tables exist
+    cursor.execute("""
+        SELECT name FROM sqlite_master 
+        WHERE type='table' 
+        ORDER BY name
+    """)
+    tables = [row[0] for row in cursor.fetchall()]
+    
+    assert "jobs" in tables
+    assert "contacts" in tables
+    assert "interviews" in tables
+    assert "resumes" in tables
+    
+    db.close()
