@@ -1,4 +1,3 @@
-from backend.app.database import Base, engine  # or wherever Base is defined
 from pathlib import Path
 import sys
 
