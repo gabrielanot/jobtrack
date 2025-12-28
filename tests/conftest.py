@@ -1,12 +1,15 @@
-from pathlib import Path
-import sys
+import pytest
+from backend.app.database import Database
 
-# ensure project root is on sys.path so tests can import app module
-project_root = Path(__file__).resolve().parents[1]
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
 
-from backend.app import Base, engine  # adjust import based on your codebase
+@pytest.fixture
+def test_db():
+    """Create an in-memory test database"""
+    db = Database(":memory:")
+    db.initialize_schema()
+    conn = db.connect()
+    yield conn
+    db.close()
 
-def setup_module(module):
-    Base.metadata.create_all(bind=engine)  # creates tables
+
+# Note: CI installs the package (pip install -e .), so no sys.path hacks are required.
