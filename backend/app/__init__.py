@@ -1,3 +1,3 @@
-from .database import Base, engine
+# Package init for backend.app — intentionally empty
 
-__all__ = ["Base", "engine"]
+__all__ = []
