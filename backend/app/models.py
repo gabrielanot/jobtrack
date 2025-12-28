@@ -121,14 +121,17 @@ class Resume(ResumeBase):
     class Config:
         from_attributes = True
 
+# ATS Analysis Models
 class ATSAnalysisRequest(BaseModel):
-    """Request model for ATS analysis"""
+    """Request for ATS analysis"""
     resume_text: str
     job_description: str
+    resume_id: Optional[int] = None
 
 
 class ATSAnalysisResponse(BaseModel):
-    """Response model for ATS analysis"""
+    """Response from ATS analysis"""
+    success: bool
     score: int
     missing_keywords: List[str]
     suggestions: List[str]
@@ -136,14 +139,17 @@ class ATSAnalysisResponse(BaseModel):
 
 
 class CoverLetterRequest(BaseModel):
-    """Request model for cover letter generation"""
+    """Request for cover letter generation"""
     resume_text: str
     job_description: str
     company_name: str
-    tone: Optional[str] = "professional"
+    tone: str = "professional"
 
 
 class CoverLetterResponse(BaseModel):
+    """Response with generated cover letter"""
+    success: bool
+    cover_letter: str
     """Response model for cover letter"""
     cover_letter: str        
 
