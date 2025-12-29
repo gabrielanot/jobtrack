@@ -90,6 +90,6 @@ def parse_resume_file(filename: str, file_content: bytes) -> Tuple[str, str]:
         return text, 'txt'
     else:
         raise ValueError(
-            f"Unsupported file type. Please upload a PDF, DOCX, or TXT file."
+            "Unsupported file type. Please upload a PDF, DOCX, or TXT file."
         )
     

@@ -446,7 +446,6 @@ def extract_from_url(request: JobExtractFromURLRequest):
 # ==================== FRONTEND SERVING ====================
 
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 
 # Serve frontend at root
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "frontend")
