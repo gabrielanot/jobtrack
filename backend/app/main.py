@@ -440,3 +440,17 @@ def extract_from_url(request: JobExtractFromURLRequest):
         raise HTTPException(status_code=400, detail=result["error"])
     
     return result
+
+
+# ==================== FRONTEND SERVING ====================
+
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+# Serve frontend at root
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "frontend")
+
+@app.get("/", response_class=FileResponse)
+def serve_frontend():
+    """Serve the frontend application"""
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))

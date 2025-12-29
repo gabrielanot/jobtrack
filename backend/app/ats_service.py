@@ -279,4 +279,3 @@ Extract and respond in this exact JSON format (no markdown, just pure JSON):
         return {
             "error": f"Failed to fetch URL: {str(e)}"
         }
-    
