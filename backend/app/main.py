@@ -3,10 +3,10 @@ JobTrack FastAPI Application
 Main entry point for the API
 """
 
+from contextlib import contextmanager, asynccontextmanager
 import json
 import os
 import uuid
-from contextlib import asynccontextmanager
 from typing import List
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
@@ -32,11 +32,19 @@ from .file_service import parse_resume_file
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "uploads", "resumes")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup code here
+    db.initialize_schema()
+    yield
+    # Shutdown code here
+
 # Initialize FastAPI app
 app = FastAPI(
     title="JobTrack API",
     description="API for tracking job applications with AI-powered features",
-    version="1.1.0"
+    version="1.1.0",
+    lifespan=lifespan
 )
 
 # Configure CORS
@@ -57,15 +65,6 @@ def get_db_connection():
         yield conn
     finally:
         conn.close()
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    db.initialize_schema()
-    yield
-
-app = FastAPI(lifespan=lifespan)
-
 
 @app.get("/api")
 def root():

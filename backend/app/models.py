@@ -2,6 +2,7 @@
 Pydantic models for request/response validation
 """
 
+from pydantic import ConfigDict
 from typing import Optional, List
 from datetime import date, datetime
 from pydantic import BaseModel, Field
