@@ -98,12 +98,18 @@ class ResumeBase(BaseModel):
     """Base resume model"""
     filename: str
     file_path: str
+    content: Optional[str] = None
+    file_type: Optional[str] = None
     notes: Optional[str] = None
 
 
-class ResumeCreate(ResumeBase):
-    """Model for uploading a resume"""
-    pass
+class ResumeCreate(BaseModel):
+    """Model for creating a resume (manual entry)"""
+    filename: str
+    file_path: str
+    content: Optional[str] = None
+    file_type: Optional[str] = None
+    notes: Optional[str] = None
 
 
 class ResumeUpdate(BaseModel):

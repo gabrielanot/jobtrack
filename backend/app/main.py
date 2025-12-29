@@ -3,11 +3,14 @@ JobTrack FastAPI Application
 Main entry point for the API
 """
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from typing import List
-from contextlib import contextmanager
 import json
+import os
+import uuid
+from contextlib import contextmanager
+from typing import List
+
+from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
 
 from .database import db
 from .models import (
@@ -23,6 +26,11 @@ from .ats_service import (
     extract_job_details,
     fetch_and_extract_from_url
 )
+from .file_service import parse_resume_file
+
+# Directory to store uploaded resumes
+UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "uploads", "resumes")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -289,6 +297,83 @@ def update_resume(resume_id: int, resume_update: ResumeUpdate):
         updated_resume = cursor.fetchone()
         
         return dict(updated_resume)
+
+
+@app.post("/api/resumes/upload", status_code=201)
+async def upload_resume(file: UploadFile = File(...)):
+    """
+    Upload a resume file (PDF, DOCX, or TXT).
+    
+    Extracts text content and stores both the file and extracted text.
+    """
+    # Validate file size (max 10MB)
+    content = await file.read()
+    if len(content) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large. Maximum size is 10MB.")
+    
+    # Validate and parse file
+    try:
+        extracted_text, file_type = parse_resume_file(file.filename, content)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    if not extracted_text.strip():
+        raise HTTPException(
+            status_code=400, 
+            detail="Could not extract text from file. The file may be empty or image-based."
+        )
+    
+    # Generate unique filename
+    file_ext = file.filename.rsplit('.', 1)[-1] if '.' in file.filename else file_type
+    unique_filename = f"{uuid.uuid4()}.{file_ext}"
+    file_path = os.path.join(UPLOAD_DIR, unique_filename)
+    
+    # Save file to disk
+    with open(file_path, "wb") as f:
+        f.write(content)
+    
+    # Store in database
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            INSERT INTO resumes (filename, file_path, content, file_type)
+            VALUES (?, ?, ?, ?)
+        """, (file.filename, file_path, extracted_text, file_type))
+        
+        conn.commit()
+        resume_id = cursor.lastrowid
+        
+        cursor.execute("SELECT * FROM resumes WHERE id = ?", (resume_id,))
+        created_resume = cursor.fetchone()
+        
+        return {
+            "id": created_resume["id"],
+            "filename": created_resume["filename"],
+            "file_type": file_type,
+            "content_preview": extracted_text[:500] + "..." if len(extracted_text) > 500 else extracted_text,
+            "content_length": len(extracted_text),
+            "upload_date": created_resume["upload_date"],
+            "message": "Resume uploaded and parsed successfully"
+        }
+
+
+@app.get("/api/resumes/{resume_id}/content")
+def get_resume_content(resume_id: int):
+    """Get the extracted text content of a resume"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, filename, content FROM resumes WHERE id = ?", (resume_id,))
+        resume = cursor.fetchone()
+        
+        if not resume:
+            raise HTTPException(status_code=404, detail="Resume not found")
+        
+        return {
+            "id": resume["id"],
+            "filename": resume["filename"],
+            "content": resume["content"]
+        }
 
 
 # ==================== ATS ANALYSIS ENDPOINTS ====================

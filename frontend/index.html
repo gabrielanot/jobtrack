@@ -626,6 +626,28 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--card-bg);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area.drag-over {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: scale(1.01);
+        }
+
         /* Page Sections */
         .page-section {
             display: none;
@@ -1010,18 +1032,33 @@
             <section id="resumes" class="page-section">
                 <div class="page-header">
                     <h2 class="page-title">My Resumes</h2>
-                    <p class="page-subtitle">Manage your resume versions and track ATS scores</p>
+                    <p class="page-subtitle">Upload and manage your resume versions</p>
+                </div>
+
+                <!-- File Upload Area -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <h3 class="card-title">Upload Resume</h3>
+                    </div>
+                    <div id="upload-area" class="upload-area" onclick="document.getElementById('resume-file-input').click()">
+                        <input type="file" id="resume-file-input" accept=".pdf,.docx,.txt" style="display: none;" onchange="handleFileSelect(event)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--primary); margin-bottom: 1rem;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p style="font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary);">PDF, DOCX, or TXT (max 10MB)</p>
+                    </div>
+                    <div id="upload-progress" style="display: none; padding: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="spinner"></div>
+                            <span id="upload-status">Uploading and parsing resume...</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Saved Resumes</h3>
-                        <button class="btn btn-primary" onclick="showAddResumeModal()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add Resume
-                        </button>
                     </div>
                     <div id="resumes-list">
                         <div class="loading"><div class="spinner"></div></div>
@@ -1351,49 +1388,168 @@
                 const resumes = await response.json();
                 const container = document.getElementById('resumes-list');
                 if (resumes.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3>No resumes yet</h3><p>Add your resume versions to track them</p></div>`;
+                    container.innerHTML = `<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3>No resumes uploaded yet</h3><p>Upload a PDF or DOCX file above to get started</p></div>`;
                     return;
                 }
-                container.innerHTML = `<table class="jobs-table"><thead><tr><th>Name</th><th>File Path</th><th>ATS Score</th><th>Upload Date</th></tr></thead><tbody>${resumes.map(resume => `<tr><td><strong>${escapeHtml(resume.filename)}</strong></td><td>${escapeHtml(resume.file_path || '-')}</td><td>${resume.ats_score ? `<span class="status-badge status-applied">${resume.ats_score}/100</span>` : '-'}</td><td>${resume.upload_date || '-'}</td></tr>`).join('')}</tbody></table>`;
+                container.innerHTML = `<table class="jobs-table"><thead><tr><th>Name</th><th>Type</th><th>ATS Score</th><th>Upload Date</th><th>Actions</th></tr></thead><tbody>${resumes.map(resume => `<tr>
+                    <td><strong>${escapeHtml(resume.filename)}</strong></td>
+                    <td><span class="status-badge">${(resume.file_type || 'file').toUpperCase()}</span></td>
+                    <td>${resume.ats_score ? `<span class="status-badge status-applied">${resume.ats_score}/100</span>` : '-'}</td>
+                    <td>${resume.upload_date ? new Date(resume.upload_date).toLocaleDateString() : '-'}</td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="viewResumeContent(${resume.id})">View</button>
+                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="useResumeForATS(${resume.id})">Use for ATS</button>
+                    </td>
+                </tr>`).join('')}</tbody></table>`;
             } catch (error) {
                 console.error('Error loading resumes:', error);
                 document.getElementById('resumes-list').innerHTML = '<p style="color: var(--danger);">Failed to load resumes</p>';
             }
         }
 
-        function showAddResumeModal() {
-            document.getElementById('resume-filename').value = '';
-            document.getElementById('resume-filepath').value = '';
-            document.getElementById('resume-notes').value = '';
-            openModal('resume-modal');
+        // File Upload Handling
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadResume(file);
+            }
         }
 
-        async function saveResume() {
-            const filename = document.getElementById('resume-filename').value.trim();
-            const filepath = document.getElementById('resume-filepath').value.trim();
-            if (!filename) {
-                showToast('Resume name is required', 'error');
+        // Setup drag and drop
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('upload-area');
+            if (uploadArea) {
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('drag-over');
+                });
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('drag-over');
+                });
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('drag-over');
+                    const file = e.dataTransfer.files[0];
+                    if (file) {
+                        uploadResume(file);
+                    }
+                });
+            }
+        });
+
+        async function uploadResume(file) {
+            // Validate file type
+            const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+            const validExtensions = ['.pdf', '.docx', '.txt'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!validExtensions.includes(fileExt)) {
+                showToast('Please upload a PDF, DOCX, or TXT file', 'error');
                 return;
             }
-            const resumeData = {
-                filename,
-                file_path: filepath || '/resumes/' + filename.toLowerCase().replace(/\s+/g, '_') + '.pdf',
-                notes: document.getElementById('resume-notes').value.trim() || null
-            };
+
+            // Validate file size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('File is too large. Maximum size is 10MB', 'error');
+                return;
+            }
+
+            // Show progress
+            document.getElementById('upload-area').style.display = 'none';
+            document.getElementById('upload-progress').style.display = 'block';
+            document.getElementById('upload-status').textContent = `Uploading ${file.name}...`;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
             try {
-                const response = await fetch(`${API_URL}/api/resumes`, {
+                const response = await fetch(`${API_URL}/api/resumes/upload`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(resumeData)
+                    body: formData
                 });
-                if (!response.ok) throw new Error('Failed to save resume');
-                closeModal('resume-modal');
-                showToast('Resume added successfully', 'success');
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Upload failed');
+                }
+
+                const result = await response.json();
+                showToast(`Resume uploaded successfully! Extracted ${result.content_length} characters.`, 'success');
                 loadResumes();
             } catch (error) {
-                console.error('Error saving resume:', error);
-                showToast('Failed to save resume', 'error');
+                console.error('Upload error:', error);
+                showToast(error.message || 'Failed to upload resume', 'error');
+            } finally {
+                // Reset upload area
+                document.getElementById('upload-area').style.display = 'block';
+                document.getElementById('upload-progress').style.display = 'none';
+                document.getElementById('resume-file-input').value = '';
             }
+        }
+
+        async function viewResumeContent(resumeId) {
+            try {
+                const response = await fetch(`${API_URL}/api/resumes/${resumeId}/content`);
+                if (!response.ok) throw new Error('Failed to fetch content');
+                const data = await response.json();
+                
+                // Create a modal to show content
+                const modalHtml = `
+                    <div class="modal-overlay" id="content-modal" onclick="if(event.target.id === 'content-modal') closeModal('content-modal')">
+                        <div class="modal" style="max-width: 800px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column;">
+                            <div class="modal-header">
+                                <h3 class="modal-title">${escapeHtml(data.filename)}</h3>
+                                <button class="modal-close" onclick="closeModal('content-modal')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="overflow-y: auto; flex: 1;">
+                                <pre style="white-space: pre-wrap; font-family: inherit; font-size: 14px; line-height: 1.6;">${escapeHtml(data.content || 'No content extracted')}</pre>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" onclick="copyToClipboard(\`${escapeHtml(data.content || '').replace(/`/g, '\\`')}\`)">Copy Text</button>
+                                <button class="btn btn-secondary" onclick="closeModal('content-modal')">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Remove existing modal if any
+                const existing = document.getElementById('content-modal');
+                if (existing) existing.remove();
+                
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                document.getElementById('content-modal').classList.add('active');
+            } catch (error) {
+                console.error('Error viewing content:', error);
+                showToast('Failed to load resume content', 'error');
+            }
+        }
+
+        async function useResumeForATS(resumeId) {
+            try {
+                const response = await fetch(`${API_URL}/api/resumes/${resumeId}/content`);
+                if (!response.ok) throw new Error('Failed to fetch content');
+                const data = await response.json();
+                
+                // Navigate to ATS page and fill in the resume
+                showPage('ats');
+                document.getElementById('ats-resume').value = data.content || '';
+                showToast('Resume loaded into ATS analyzer', 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Failed to load resume', 'error');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy', 'error');
+            });
         }
 
         // ATS Analysis

@@ -2,7 +2,6 @@
 SQL and Database Tests for JobTrack
 """
 
-import pytest
 import tempfile
 import os
 from backend.app.database import Database
@@ -24,6 +23,11 @@ def test_database_schema():
         cursor.execute("SELECT COUNT(*) FROM jobs")
         count = cursor.fetchone()[0]
         assert count == 0  # Table exists but is empty
+        
+        # Verify job_description column exists
+        cursor.execute("PRAGMA table_info(jobs)")
+        columns = [row[1] for row in cursor.fetchall()]
+        assert "job_description" in columns
         
         conn.close()
     finally:
@@ -58,6 +62,12 @@ def test_tables_exist():
         assert "contacts" in tables
         assert "interviews" in tables
         assert "resumes" in tables
+        
+        # Verify resumes table has content and file_type columns
+        cursor.execute("PRAGMA table_info(resumes)")
+        columns = [row[1] for row in cursor.fetchall()]
+        assert "content" in columns
+        assert "file_type" in columns
         
         conn.close()
     finally:
