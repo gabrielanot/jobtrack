@@ -3,8 +3,6 @@ Database initialization and connection management
 """
 
 import sqlite3
-from pathlib import Path
-from typing import Optional
 
 
 class Database:

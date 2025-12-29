@@ -6,7 +6,6 @@ Main entry point for the API
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
-import sqlite3
 from contextlib import contextmanager
 import json
 
