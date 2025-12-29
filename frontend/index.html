@@ -98,7 +98,7 @@
             letter-spacing: 1.2px;
             color: var(--text-muted);
             padding: 0 12px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .nav-item {
@@ -110,7 +110,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--text-secondary);
-            font-weight: 500;
+            margin-bottom: 4px;
         }
 
         .nav-item:hover {
@@ -119,99 +119,36 @@
         }
 
         .nav-item.active {
-            background: var(--accent-primary);
-            color: white;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+            color: var(--accent-secondary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
         }
 
         .nav-item svg {
             width: 20px;
             height: 20px;
-            flex-shrink: 0;
         }
 
         /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 260px;
-            padding: 32px 40px;
-            background: var(--bg-primary);
+            padding: 32px;
         }
 
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            color: var(--text-secondary);
-            font-size: 15px;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-        }
-
-        .stat-card.wishlist::before { background: var(--text-muted); }
-        .stat-card.applied::before { background: var(--info); }
-        .stat-card.interviewing::before { background: var(--warning); }
-        .stat-card.offer::before { background: var(--success); }
-        .stat-card.rejected::before { background: var(--danger); }
-
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-        }
-
-        /* Cards & Sections */
+        /* Cards */
         .card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
             padding: 24px;
             margin-bottom: 24px;
         }
 
         .card-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
 
@@ -228,22 +165,20 @@
             padding: 10px 20px;
             border-radius: var(--radius-md);
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
             border: none;
-            font-family: inherit;
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
-            background: var(--accent-primary);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-1px);
             box-shadow: 0 4px 20px var(--accent-glow);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
@@ -258,10 +193,20 @@
 
         .btn-sm {
             padding: 6px 12px;
-            font-size: 13px;
+            font-size: 12px;
         }
 
-        /* Form Elements */
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Forms */
         .form-group {
             margin-bottom: 20px;
         }
@@ -269,7 +214,7 @@
         .form-label {
             display: block;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-secondary);
             margin-bottom: 8px;
         }
@@ -282,7 +227,6 @@
             border-radius: var(--radius-md);
             color: var(--text-primary);
             font-size: 14px;
-            font-family: inherit;
             transition: all 0.2s ease;
         }
 
@@ -294,7 +238,7 @@
 
         .form-textarea {
             resize: vertical;
-            min-height: 120px;
+            min-height: 100px;
         }
 
         .form-row {
@@ -303,84 +247,293 @@
             gap: 16px;
         }
 
-        /* Jobs Table */
-        .jobs-table {
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* URL Import Box */
+        .url-import-box {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .url-import-box.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .url-import-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .url-import-row input {
+            flex: 1;
+        }
+
+        /* Selection Dropdowns */
+        .selection-group {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .selection-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .selection-header label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .selection-or {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin: 12px 0;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-wishlist { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .status-applied { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .status-interviewing { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .status-offer { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .status-rejected { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        /* Inline Status Select */
+        .status-select {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a1a1aa' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 28px;
+            transition: all 0.2s ease;
+        }
+
+        .status-select:hover {
+            filter: brightness(1.1);
+        }
+
+        .status-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .status-select.status-wishlist { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .status-select.status-applied { background-color: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .status-select.status-interviewing { background-color: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .status-select.status-offer { background-color: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .status-select.status-rejected { background-color: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        .status-select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .jobs-table th {
+        th, td {
+            padding: 16px;
             text-align: left;
-            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
             font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: var(--text-muted);
-            border-bottom: 1px solid var(--border-color);
         }
 
-        .jobs-table td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-
-        .jobs-table tr:hover td {
+        tr:hover {
             background: var(--bg-hover);
         }
 
-        .company-cell {
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
             gap: 12px;
         }
 
-        .company-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .stat-icon.yellow { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+        .stat-info h3 {
+            font-size: 28px;
             font-weight: 700;
+        }
+
+        .stat-info p {
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
-        .company-info h4 {
-            font-weight: 600;
-            margin-bottom: 2px;
+        /* ATS Layout */
+        .ats-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
         }
 
-        .company-info span {
-            font-size: 13px;
-            color: var(--text-muted);
+        @media (max-width: 1024px) {
+            .ats-layout {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* Status Badge */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .status-wishlist { background: rgba(113, 113, 122, 0.2); color: var(--text-muted); }
-        .status-applied { background: rgba(59, 130, 246, 0.2); color: var(--info); }
-        .status-interviewing { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-        .status-offer { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .status-rejected { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-
-        /* ATS Score Circle */
+        /* ATS Score */
         .ats-score-container {
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 20px;
         }
 
         .ats-score-circle {
@@ -406,25 +559,27 @@
             stroke-linecap: round;
             stroke-dasharray: 565;
             stroke-dashoffset: 565;
-            transition: stroke-dashoffset 1s ease-out;
+            transition: stroke-dashoffset 1s ease;
         }
 
         .ats-score-text {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .ats-score-value {
             font-size: 48px;
             font-weight: 700;
+            color: var(--accent-secondary);
         }
 
         .ats-score-label {
-            font-size: 14px;
             color: var(--text-muted);
+            font-size: 14px;
         }
 
         /* Keywords */
@@ -432,83 +587,54 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 16px;
         }
 
         .keyword-tag {
-            display: inline-flex;
-            align-items: center;
             padding: 6px 12px;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
             border-radius: 20px;
             font-size: 13px;
-            color: var(--danger);
         }
 
-        .keyword-tag.found {
-            background: rgba(16, 185, 129, 0.15);
-            border-color: rgba(16, 185, 129, 0.3);
-            color: var(--success);
-        }
-
-        /* Suggestions List */
+        /* Suggestions */
         .suggestions-list {
             list-style: none;
         }
 
         .suggestions-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
             padding: 12px 0;
             border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
         }
 
         .suggestions-list li:last-child {
             border-bottom: none;
         }
 
-        .suggestion-icon {
-            width: 24px;
-            height: 24px;
-            background: rgba(99, 102, 241, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: var(--accent-primary);
-        }
-
-        /* Cover Letter Preview */
+        /* Cover Letter */
         .cover-letter-preview {
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 24px;
-            font-size: 14px;
-            line-height: 1.8;
             white-space: pre-wrap;
-            max-height: 400px;
-            overflow-y: auto;
+            line-height: 1.8;
         }
 
-        /* Tone Selector */
+        /* Tone Options */
         .tone-options {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
         }
 
         .tone-option {
-            flex: 1;
             padding: 16px;
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: all 0.2s ease;
-            text-align: center;
         }
 
         .tone-option:hover {
@@ -521,7 +647,7 @@
         }
 
         .tone-option h4 {
-            font-weight: 600;
+            font-size: 14px;
             margin-bottom: 4px;
         }
 
@@ -530,137 +656,83 @@
             color: var(--text-muted);
         }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .modal-close:hover {
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            padding: 20px 24px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--accent-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         /* Upload Area */
         .upload-area {
             border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 40px;
+            border-radius: var(--radius-lg);
+            padding: 48px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
-            background: var(--card-bg);
+            margin-bottom: 24px;
         }
 
-        .upload-area:hover {
-            border-color: var(--primary);
+        .upload-area:hover, .upload-area.drag-over {
+            border-color: var(--accent-primary);
             background: rgba(99, 102, 241, 0.05);
         }
 
-        .upload-area.drag-over {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-            transform: scale(1.01);
+        .upload-area svg {
+            width: 48px;
+            height: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
         }
 
-        /* Page Sections */
-        .page-section {
-            display: none;
+        .upload-area h3 {
+            margin-bottom: 8px;
         }
 
-        .page-section.active {
-            display: block;
+        .upload-area p {
+            color: var(--text-muted);
+            font-size: 14px;
         }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.info { border-left: 4px solid var(--info); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Type Badge */
+        .type-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .type-badge.pdf { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .type-badge.docx { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .type-badge.txt { background: rgba(156, 163, 175, 0.2); color: #9ca3af; }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 48px;
             color: var(--text-muted);
         }
 
@@ -671,105 +743,92 @@
             opacity: 0.5;
         }
 
-        .empty-state h3 {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        /* Tabs */
-        .tabs {
+        /* Resume Checkboxes */
+        .resume-checkboxes {
             display: flex;
-            gap: 4px;
-            margin-bottom: 24px;
-            background: var(--bg-secondary);
-            padding: 4px;
-            border-radius: var(--radius-md);
-            width: fit-content;
-        }
-
-        .tab {
-            padding: 8px 16px;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 8px;
+            background: var(--bg-primary);
             border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
         }
 
-        .tab:hover {
-            color: var(--text-primary);
-        }
-
-        .tab.active {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        /* Toast Notifications */
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 2000;
-        }
-
-        .toast {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 16px 20px;
-            margin-top: 12px;
+        .resume-checkbox-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .toast.success { border-left: 4px solid var(--success); }
-        .toast.error { border-left: 4px solid var(--danger); }
-        .toast.info { border-left: 4px solid var(--info); }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .resume-checkbox-item:hover {
+            border-color: var(--accent-primary);
         }
 
-        /* Two column layout for ATS */
-        .ats-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+        .resume-checkbox-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
         }
 
-        @media (max-width: 1200px) {
-            .ats-layout {
-                grid-template-columns: 1fr;
-            }
+        .resume-checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .resume-checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .resume-checkbox-item .type-badge {
+            font-size: 10px;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text-muted);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Actions column */
+        .actions-cell {
+            display: flex;
+            gap: 8px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                display: none;
+                width: 100%;
+                height: auto;
+                position: relative;
             }
             .main-content {
                 margin-left: 0;
-                padding: 20px;
             }
             .form-row {
                 grid-template-columns: 1fr;
             }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
+            .tone-options {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -779,49 +838,49 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <div class="logo-icon">📋</div>
+                <div class="logo-icon">💼</div>
                 <h1>JobTrack</h1>
             </div>
 
             <nav class="nav-section">
-                <div class="nav-label">Main</div>
-                <div class="nav-item active" data-page="dashboard">
+                <div class="nav-label">Overview</div>
+                <div class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
                     Dashboard
                 </div>
-                <div class="nav-item" data-page="jobs">
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">Applications</div>
+                <div class="nav-item" data-page="jobs" onclick="navigateTo('jobs')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     Jobs
                 </div>
+                <div class="nav-item" data-page="resumes" onclick="navigateTo('resumes')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Resumes
+                </div>
             </nav>
 
             <nav class="nav-section">
                 <div class="nav-label">AI Tools</div>
-                <div class="nav-item" data-page="ats">
+                <div class="nav-item" data-page="ats" onclick="navigateTo('ats')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                     ATS Analyzer
                 </div>
-                <div class="nav-item" data-page="cover-letter">
+                <div class="nav-item" data-page="cover-letter" onclick="navigateTo('cover-letter')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                     Cover Letter
-                </div>
-            </nav>
-
-            <nav class="nav-section">
-                <div class="nav-label">Data</div>
-                <div class="nav-item" data-page="resumes">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Resumes
                 </div>
             </nav>
         </aside>
@@ -832,74 +891,143 @@
             <section id="dashboard" class="page-section active">
                 <div class="page-header">
                     <h2 class="page-title">Dashboard</h2>
-                    <p class="page-subtitle">Track your job search progress at a glance</p>
+                    <p class="page-subtitle">Track your job search progress</p>
                 </div>
 
-                <div class="stats-grid" id="stats-grid">
-                    <div class="stat-card wishlist">
-                        <div class="stat-label">Wishlist</div>
-                        <div class="stat-value" id="stat-wishlist">-</div>
-                    </div>
-                    <div class="stat-card applied">
-                        <div class="stat-label">Applied</div>
-                        <div class="stat-value" id="stat-applied">-</div>
-                    </div>
-                    <div class="stat-card interviewing">
-                        <div class="stat-label">Interviewing</div>
-                        <div class="stat-value" id="stat-interviewing">-</div>
-                    </div>
-                    <div class="stat-card offer">
-                        <div class="stat-label">Offers</div>
-                        <div class="stat-value" id="stat-offer">-</div>
-                    </div>
-                    <div class="stat-card rejected">
-                        <div class="stat-label">Rejected</div>
-                        <div class="stat-value" id="stat-rejected">-</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Recent Applications</h3>
-                        <button class="btn btn-primary btn-sm" onclick="showAddJobModal()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                            Add Job
-                        </button>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-total">0</h3>
+                            <p>Total Jobs</p>
+                        </div>
                     </div>
-                    <div id="recent-jobs">
-                        <div class="loading"><div class="spinner"></div></div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-applied">0</h3>
+                            <p>Applied</p>
+                        </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Jobs Page -->
-            <section id="jobs" class="page-section">
-                <div class="page-header">
-                    <h2 class="page-title">Job Applications</h2>
-                    <p class="page-subtitle">Manage all your job applications in one place</p>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-interviewing">0</h3>
+                            <p>Interviewing</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-offers">0</h3>
+                            <p>Offers</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <div class="tabs" id="status-tabs">
-                            <div class="tab active" data-status="all">All</div>
-                            <div class="tab" data-status="wishlist">Wishlist</div>
-                            <div class="tab" data-status="applied">Applied</div>
-                            <div class="tab" data-status="interviewing">Interviewing</div>
-                            <div class="tab" data-status="offer">Offers</div>
-                            <div class="tab" data-status="rejected">Rejected</div>
-                        </div>
+                        <h3 class="card-title">Quick Actions</h3>
+                    </div>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         <button class="btn btn-primary" onclick="showAddJobModal()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
                             Add Job
                         </button>
+                        <button class="btn btn-secondary" onclick="navigateTo('resumes')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                            Upload Resume
+                        </button>
+                        <button class="btn btn-secondary" onclick="navigateTo('ats')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                            </svg>
+                            Analyze Resume
+                        </button>
                     </div>
-                    <div id="jobs-list">
-                        <div class="loading"><div class="spinner"></div></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Applications</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="navigateTo('jobs')">View All</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-jobs">
+                                <tr>
+                                    <td colspan="4" class="empty-state">No jobs added yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jobs Page -->
+            <section id="jobs" class="page-section">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 class="page-title">Jobs</h2>
+                        <p class="page-subtitle">Manage your job applications</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddJobModal()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add Job
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Location</th>
+                                    <th>Salary</th>
+                                    <th>Status</th>
+                                    <th>Has JD</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jobs-list">
+                                <tr>
+                                    <td colspan="8" class="empty-state">No jobs added yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -914,15 +1042,32 @@
                 <div class="ats-layout">
                     <div>
                         <div class="card">
-                            <h3 class="card-title" style="margin-bottom: 20px;">Input</h3>
-                            <div class="form-group">
-                                <label class="form-label">Your Resume</label>
-                                <textarea class="form-textarea" id="ats-resume" rows="8" placeholder="Paste your resume text here..."></textarea>
+                            <h3 class="card-title" style="margin-bottom: 20px;">Select Job & Resume</h3>
+                            
+                            <!-- Job Selection -->
+                            <div class="selection-group">
+                                <div class="selection-header">
+                                    <label>📋 Job Description</label>
+                                </div>
+                                <select class="form-select" id="ats-job-select" onchange="onJobSelected('ats')">
+                                    <option value="">-- Select a saved job --</option>
+                                </select>
+                                <div class="selection-or">or paste manually below</div>
+                                <textarea class="form-textarea" id="ats-job-desc" rows="6" placeholder="Paste job description here..."></textarea>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Job Description</label>
-                                <textarea class="form-textarea" id="ats-job-desc" rows="8" placeholder="Paste the job description here..."></textarea>
+
+                            <!-- Resume Selection -->
+                            <div class="selection-group">
+                                <div class="selection-header">
+                                    <label>📄 Your Resume</label>
+                                </div>
+                                <select class="form-select" id="ats-resume-select" onchange="onResumeSelected('ats')">
+                                    <option value="">-- Select a saved resume --</option>
+                                </select>
+                                <div class="selection-or">or paste manually below</div>
+                                <textarea class="form-textarea" id="ats-resume" rows="6" placeholder="Paste your resume text here..."></textarea>
                             </div>
+
                             <button class="btn btn-primary" onclick="analyzeATS()" id="analyze-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -972,19 +1117,38 @@
                 <div class="ats-layout">
                     <div>
                         <div class="card">
-                            <h3 class="card-title" style="margin-bottom: 20px;">Details</h3>
-                            <div class="form-group">
-                                <label class="form-label">Company Name</label>
-                                <input type="text" class="form-input" id="cl-company" placeholder="e.g., Tesla">
+                            <h3 class="card-title" style="margin-bottom: 20px;">Select Job & Resume</h3>
+                            
+                            <!-- Job Selection -->
+                            <div class="selection-group">
+                                <div class="selection-header">
+                                    <label>📋 Job</label>
+                                </div>
+                                <select class="form-select" id="cl-job-select" onchange="onJobSelected('cl')">
+                                    <option value="">-- Select a saved job --</option>
+                                </select>
+                                <div class="form-group" style="margin-top: 12px;">
+                                    <label class="form-label">Company Name</label>
+                                    <input type="text" class="form-input" id="cl-company" placeholder="e.g., Google">
+                                </div>
+                                <div class="selection-or">Job description (auto-filled or paste)</div>
+                                <textarea class="form-textarea" id="cl-job-desc" rows="5" placeholder="Paste job description here..."></textarea>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Your Resume</label>
-                                <textarea class="form-textarea" id="cl-resume" rows="6" placeholder="Paste your resume text here..."></textarea>
+
+                            <!-- Resume Selection - Multiple -->
+                            <div class="selection-group">
+                                <div class="selection-header">
+                                    <label>📄 Your Resume(s)</label>
+                                    <span style="font-size: 12px; color: var(--text-muted);">Select one or more</span>
+                                </div>
+                                <div id="cl-resume-checkboxes" class="resume-checkboxes">
+                                    <!-- Will be populated by JS -->
+                                    <p style="color: var(--text-muted); font-size: 13px;">No resumes uploaded yet</p>
+                                </div>
+                                <div class="selection-or">or paste/edit manually below</div>
+                                <textarea class="form-textarea" id="cl-resume" rows="5" placeholder="Resume content will appear here when you select above, or paste manually..."></textarea>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Job Description</label>
-                                <textarea class="form-textarea" id="cl-job-desc" rows="6" placeholder="Paste the job description here..."></textarea>
-                            </div>
+
                             <div class="form-group">
                                 <label class="form-label">Tone</label>
                                 <div class="tone-options">
@@ -1035,33 +1199,39 @@
                     <p class="page-subtitle">Upload and manage your resume versions</p>
                 </div>
 
-                <!-- File Upload Area -->
-                <div class="card" style="margin-bottom: 1.5rem;">
-                    <div class="card-header">
-                        <h3 class="card-title">Upload Resume</h3>
-                    </div>
-                    <div id="upload-area" class="upload-area" onclick="document.getElementById('resume-file-input').click()">
-                        <input type="file" id="resume-file-input" accept=".pdf,.docx,.txt" style="display: none;" onchange="handleFileSelect(event)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--primary); margin-bottom: 1rem;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                <div class="card">
+                    <h3 class="card-title" style="margin-bottom: 20px;">Upload Resume</h3>
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('resume-file').click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                         </svg>
-                        <p style="font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
-                        <p style="font-size: 0.875rem; color: var(--text-secondary);">PDF, DOCX, or TXT (max 10MB)</p>
+                        <h3>Click to upload or drag and drop</h3>
+                        <p>PDF, DOCX, or TXT (max 10MB)</p>
                     </div>
-                    <div id="upload-progress" style="display: none; padding: 1rem;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div class="spinner"></div>
-                            <span id="upload-status">Uploading and parsing resume...</span>
-                        </div>
+                    <input type="file" id="resume-file" accept=".pdf,.docx,.txt" style="display: none" onchange="handleFileSelect(event)">
+                    <div id="upload-progress" style="display: none;">
+                        <div class="spinner"></div> Uploading and parsing resume...
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Saved Resumes</h3>
-                    </div>
-                    <div id="resumes-list">
-                        <div class="loading"><div class="spinner"></div></div>
+                    <h3 class="card-title" style="margin-bottom: 20px;">Saved Resumes</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Upload Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resumes-list">
+                                <tr>
+                                    <td colspan="4" class="empty-state">No resumes uploaded yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -1080,6 +1250,16 @@
                 </button>
             </div>
             <div class="modal-body">
+                <!-- URL Import Section -->
+                <div class="url-import-box" id="url-import-box">
+                    <strong>🔗 Import from Job URL</strong>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Paste a job posting URL to auto-fill details</p>
+                    <div class="url-import-row">
+                        <input type="url" class="form-input" id="job-import-url" placeholder="https://linkedin.com/jobs/...">
+                        <button class="btn btn-primary" onclick="importFromUrl()" id="import-btn">Import</button>
+                    </div>
+                </div>
+
                 <input type="hidden" id="job-id">
                 <div class="form-row">
                     <div class="form-group">
@@ -1122,8 +1302,13 @@
                     <input type="url" class="form-input" id="job-url" placeholder="https://...">
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Job Description</label>
+                    <textarea class="form-textarea" id="job-description" rows="6" placeholder="Paste the full job description here... This will be used for ATS analysis and cover letter generation."></textarea>
+                    <p class="form-hint">💡 Saving the job description lets you use it later in ATS Analyzer and Cover Letter Generator</p>
+                </div>
+                <div class="form-group">
                     <label class="form-label">Notes</label>
-                    <textarea class="form-textarea" id="job-notes" rows="3" placeholder="Any additional notes..."></textarea>
+                    <textarea class="form-textarea" id="job-notes" rows="2" placeholder="Any additional notes..."></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1133,34 +1318,23 @@
         </div>
     </div>
 
-    <!-- Add Resume Modal -->
-    <div class="modal-overlay" id="resume-modal">
-        <div class="modal">
+    <!-- Resume Content Modal -->
+    <div class="modal-overlay" id="content-modal">
+        <div class="modal" style="max-width: 800px;">
             <div class="modal-header">
-                <h3 class="modal-title">Add Resume</h3>
-                <button class="modal-close" onclick="closeModal('resume-modal')">
+                <h3 class="modal-title" id="content-modal-title">Resume Content</h3>
+                <button class="modal-close" onclick="closeModal('content-modal')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Resume Name *</label>
-                    <input type="text" class="form-input" id="resume-filename" placeholder="e.g., Software Engineer Resume v2">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">File Path</label>
-                    <input type="text" class="form-input" id="resume-filepath" placeholder="e.g., /resumes/my_resume.pdf">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Notes</label>
-                    <textarea class="form-textarea" id="resume-notes" rows="3" placeholder="Notes about this resume version..."></textarea>
-                </div>
+                <pre id="content-modal-text" style="white-space: pre-wrap; background: var(--bg-secondary); padding: 20px; border-radius: var(--radius-md); max-height: 60vh; overflow-y: auto;"></pre>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('resume-modal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveResume()">Save Resume</button>
+                <button class="btn btn-secondary" onclick="copyModalContent()">Copy to Clipboard</button>
+                <button class="btn btn-primary" onclick="closeModal('content-modal')">Close</button>
             </div>
         </div>
     </div>
@@ -1169,32 +1343,20 @@
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        // API Base URL - change this if your backend runs on a different port
-        // API URL - empty for same-origin requests (works both locally and deployed)
         const API_URL = '';
-
-        // Current state
         let currentFilter = 'all';
-        let selectedTone = 'professional';
+        let jobsCache = [];
+        let resumesCache = [];
 
-        // Initialize app
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            initNavigation();
-            initTabs();
-            initToneSelector();
             loadDashboard();
+            initToneOptions();
+            initDragDrop();
+            initModalClose();
         });
 
         // Navigation
-        function initNavigation() {
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const page = item.dataset.page;
-                    navigateTo(page);
-                });
-            });
-        }
-
         function navigateTo(page) {
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.toggle('active', item.dataset.page === page);
@@ -1206,179 +1368,400 @@
                 case 'dashboard': loadDashboard(); break;
                 case 'jobs': loadJobs(); break;
                 case 'resumes': loadResumes(); break;
+                case 'ats': loadSelectOptions(); break;
+                case 'cover-letter': loadSelectOptions(); break;
             }
         }
 
-        // Tabs
-        function initTabs() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentFilter = tab.dataset.status;
-                    loadJobs();
-                });
-            });
+        // Load Select Options for ATS and Cover Letter pages
+        async function loadSelectOptions() {
+            await Promise.all([loadJobsForSelect(), loadResumesForSelect()]);
         }
 
-        // Tone Selector
-        function initToneSelector() {
-            document.querySelectorAll('.tone-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.tone-option').forEach(o => o.classList.remove('selected'));
-                    option.classList.add('selected');
-                    selectedTone = option.dataset.tone;
+        async function loadJobsForSelect() {
+            try {
+                const response = await fetch(`${API_URL}/api/jobs/with-descriptions`);
+                const jobs = await response.json();
+                jobsCache = jobs;
+                
+                const selects = ['ats-job-select', 'cl-job-select'];
+                selects.forEach(selectId => {
+                    const select = document.getElementById(selectId);
+                    if (select) {
+                        select.innerHTML = '<option value="">-- Select a saved job --</option>';
+                        jobs.forEach(job => {
+                            const option = document.createElement('option');
+                            option.value = job.id;
+                            option.textContent = `${job.company} - ${job.position}`;
+                            option.dataset.company = job.company;
+                            option.dataset.description = job.job_description || '';
+                            select.appendChild(option);
+                        });
+                    }
                 });
-            });
+            } catch (error) {
+                console.error('Error loading jobs for select:', error);
+            }
+        }
+
+        async function loadResumesForSelect() {
+            try {
+                const response = await fetch(`${API_URL}/api/resumes`);
+                const resumes = await response.json();
+                resumesCache = resumes;
+                
+                // Populate ATS dropdown
+                const atsSelect = document.getElementById('ats-resume-select');
+                if (atsSelect) {
+                    atsSelect.innerHTML = '<option value="">-- Select a saved resume --</option>';
+                    resumes.forEach(resume => {
+                        const option = document.createElement('option');
+                        option.value = resume.id;
+                        option.textContent = resume.filename;
+                        atsSelect.appendChild(option);
+                    });
+                }
+                
+                // Populate Cover Letter checkboxes
+                const checkboxContainer = document.getElementById('cl-resume-checkboxes');
+                if (checkboxContainer) {
+                    if (resumes.length === 0) {
+                        checkboxContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">No resumes uploaded yet. <a href="#" onclick="navigateTo(\'resumes\'); return false;" style="color: var(--accent-secondary);">Upload one</a></p>';
+                    } else {
+                        checkboxContainer.innerHTML = resumes.map(resume => `
+                            <div class="resume-checkbox-item" onclick="toggleResumeCheckbox(${resume.id}, this)">
+                                <input type="checkbox" id="resume-cb-${resume.id}" value="${resume.id}" onchange="onResumeCheckboxChange()">
+                                <label for="resume-cb-${resume.id}">${escapeHtml(resume.filename)}</label>
+                                <span class="type-badge ${resume.file_type || 'txt'}">${(resume.file_type || 'txt').toUpperCase()}</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading resumes for select:', error);
+            }
+        }
+
+        function toggleResumeCheckbox(id, element) {
+            const checkbox = document.getElementById(`resume-cb-${id}`);
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            onResumeCheckboxChange();
+        }
+
+        async function onResumeCheckboxChange() {
+            const checkboxes = document.querySelectorAll('#cl-resume-checkboxes input[type="checkbox"]:checked');
+            const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (selectedIds.length === 0) {
+                document.getElementById('cl-resume').value = '';
+                return;
+            }
+            
+            // Load and combine selected resumes
+            try {
+                const contents = await Promise.all(
+                    selectedIds.map(async (id) => {
+                        const response = await fetch(`${API_URL}/api/resumes/${id}/content`);
+                        const data = await response.json();
+                        const resume = resumesCache.find(r => r.id == id);
+                        const filename = resume ? resume.filename : `Resume ${id}`;
+                        return `=== ${filename} ===\n${data.content || ''}`;
+                    })
+                );
+                
+                document.getElementById('cl-resume').value = contents.join('\n\n');
+            } catch (error) {
+                console.error('Error loading resume contents:', error);
+                showToast('Failed to load some resume contents', 'error');
+            }
+        }
+
+        // When job is selected from dropdown
+        async function onJobSelected(prefix) {
+            const select = document.getElementById(`${prefix}-job-select`);
+            const descTextarea = document.getElementById(`${prefix}-job-desc`);
+            const companyInput = document.getElementById(`${prefix}-company`);
+            
+            if (select.value) {
+                const selectedOption = select.options[select.selectedIndex];
+                const description = selectedOption.dataset.description;
+                
+                if (description) {
+                    descTextarea.value = description;
+                }
+                
+                if (companyInput) {
+                    companyInput.value = selectedOption.dataset.company || '';
+                }
+            }
+        }
+
+        // When resume is selected from dropdown
+        async function onResumeSelected(prefix) {
+            const select = document.getElementById(`${prefix}-resume-select`);
+            const resumeTextarea = document.getElementById(`${prefix}-resume`);
+            
+            if (select.value) {
+                try {
+                    const response = await fetch(`${API_URL}/api/resumes/${select.value}/content`);
+                    const data = await response.json();
+                    resumeTextarea.value = data.content || '';
+                } catch (error) {
+                    console.error('Error loading resume content:', error);
+                    showToast('Failed to load resume content', 'error');
+                }
+            }
         }
 
         // Dashboard
         async function loadDashboard() {
             try {
-                const response = await fetch(`${API_URL}/api/stats`);
-                const stats = await response.json();
-                document.getElementById('stat-wishlist').textContent = stats.by_status?.wishlist || 0;
+                const [statsRes, jobsRes] = await Promise.all([
+                    fetch(`${API_URL}/api/stats`),
+                    fetch(`${API_URL}/api/jobs`)
+                ]);
+                
+                const stats = await statsRes.json();
+                const jobs = await jobsRes.json();
+                
+                document.getElementById('stat-total').textContent = stats.total_jobs || 0;
                 document.getElementById('stat-applied').textContent = stats.by_status?.applied || 0;
                 document.getElementById('stat-interviewing').textContent = stats.by_status?.interviewing || 0;
-                document.getElementById('stat-offer').textContent = stats.by_status?.offer || 0;
-                document.getElementById('stat-rejected').textContent = stats.by_status?.rejected || 0;
-                loadRecentJobs();
+                document.getElementById('stat-offers').textContent = stats.by_status?.offer || 0;
+                
+                const recentJobs = jobs.slice(0, 5);
+                const tbody = document.getElementById('recent-jobs');
+                
+                if (recentJobs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No jobs added yet</td></tr>';
+                } else {
+                    tbody.innerHTML = recentJobs.map(job => `
+                        <tr>
+                            <td>${escapeHtml(job.company)}</td>
+                            <td>${escapeHtml(job.position)}</td>
+                            <td><span class="status-badge status-${job.status}">${job.status}</span></td>
+                            <td>${formatDate(job.date_added)}</td>
+                        </tr>
+                    `).join('');
+                }
             } catch (error) {
                 console.error('Error loading dashboard:', error);
-                showToast('Failed to load dashboard data', 'error');
-            }
-        }
-
-        async function loadRecentJobs() {
-            try {
-                const response = await fetch(`${API_URL}/api/jobs`);
-                const jobs = await response.json();
-                const container = document.getElementById('recent-jobs');
-                if (jobs.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg><h3>No jobs yet</h3><p>Start tracking your job applications</p></div>`;
-                    return;
-                }
-                container.innerHTML = renderJobsTable(jobs.slice(0, 5));
-            } catch (error) {
-                console.error('Error loading recent jobs:', error);
-                document.getElementById('recent-jobs').innerHTML = '<p style="color: var(--danger);">Failed to load jobs</p>';
             }
         }
 
         // Jobs
         async function loadJobs() {
             try {
-                let url = `${API_URL}/api/jobs`;
-                if (currentFilter !== 'all') url += `?status=${currentFilter}`;
-                const response = await fetch(url);
+                const response = await fetch(`${API_URL}/api/jobs`);
                 const jobs = await response.json();
-                const container = document.getElementById('jobs-list');
+                
+                const tbody = document.getElementById('jobs-list');
+                
                 if (jobs.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg><h3>No jobs found</h3><p>${currentFilter === 'all' ? 'Start tracking your job applications' : 'No jobs with this status'}</p></div>`;
+                    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No jobs added yet</td></tr>';
                     return;
                 }
-                container.innerHTML = renderJobsTable(jobs);
+                
+                tbody.innerHTML = jobs.map(job => `
+                    <tr>
+                        <td><strong>${escapeHtml(job.company)}</strong></td>
+                        <td>${escapeHtml(job.position)}</td>
+                        <td>${escapeHtml(job.location || '-')}</td>
+                        <td>${job.salary_min ? `$${job.salary_min.toLocaleString()}` : '-'}${job.salary_max ? ` - $${job.salary_max.toLocaleString()}` : ''}</td>
+                        <td>
+                            <select class="status-select status-${job.status}" onchange="updateJobStatus(${job.id}, this.value)" data-job-id="${job.id}">
+                                <option value="wishlist" ${job.status === 'wishlist' ? 'selected' : ''}>Wishlist</option>
+                                <option value="applied" ${job.status === 'applied' ? 'selected' : ''}>Applied</option>
+                                <option value="interviewing" ${job.status === 'interviewing' ? 'selected' : ''}>Interviewing</option>
+                                <option value="offer" ${job.status === 'offer' ? 'selected' : ''}>Offer</option>
+                                <option value="rejected" ${job.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            </select>
+                        </td>
+                        <td>${job.job_description ? '✅' : '❌'}</td>
+                        <td>${formatDate(job.date_added)}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-secondary btn-sm" onclick="editJob(${job.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteJob(${job.id})">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
             } catch (error) {
                 console.error('Error loading jobs:', error);
-                document.getElementById('jobs-list').innerHTML = '<p style="color: var(--danger);">Failed to load jobs. Make sure the API server is running.</p>';
+                showToast('Failed to load jobs', 'error');
             }
         }
 
-        function renderJobsTable(jobs) {
-            return `<table class="jobs-table"><thead><tr><th>Company</th><th>Location</th><th>Salary</th><th>Status</th><th>Date Added</th><th></th></tr></thead><tbody>${jobs.map(job => `<tr><td><div class="company-cell"><div class="company-avatar">${job.company.charAt(0).toUpperCase()}</div><div class="company-info"><h4>${escapeHtml(job.company)}</h4><span>${escapeHtml(job.position)}</span></div></div></td><td>${escapeHtml(job.location || '-')}</td><td>${formatSalary(job.salary_min, job.salary_max)}</td><td><span class="status-badge status-${job.status}">${job.status}</span></td><td>${job.date_added || '-'}</td><td class="actions-cell"><button class="btn btn-secondary btn-sm" onclick="editJob(${job.id})" style="margin-right: 8px;">Edit</button><button class="btn btn-secondary btn-sm" onclick="deleteJob(${job.id})" style="color: var(--danger);">Delete</button></td></tr>`).join('')}</tbody></table>`;
-        }
-
-        function formatSalary(min, max) {
-            if (!min && !max) return '-';
-            if (min && max) return `$${(min/1000).toFixed(0)}k - $${(max/1000).toFixed(0)}k`;
-            if (min) return `$${(min/1000).toFixed(0)}k+`;
-            return `Up to $${(max/1000).toFixed(0)}k`;
-        }
-
-        // Job CRUD
         function showAddJobModal() {
             document.getElementById('job-modal-title').textContent = 'Add New Job';
             document.getElementById('job-id').value = '';
             document.getElementById('job-company').value = '';
             document.getElementById('job-position').value = '';
             document.getElementById('job-location').value = '';
-            document.getElementById('job-status').value = 'wishlist';
+            document.getElementById('job-url').value = '';
             document.getElementById('job-salary-min').value = '';
             document.getElementById('job-salary-max').value = '';
-            document.getElementById('job-url').value = '';
+            document.getElementById('job-status').value = 'wishlist';
             document.getElementById('job-notes').value = '';
+            document.getElementById('job-description').value = '';
+            document.getElementById('job-import-url').value = '';
             openModal('job-modal');
         }
 
-        async function editJob(jobId) {
+        async function importFromUrl() {
+            const url = document.getElementById('job-import-url').value.trim();
+            if (!url) {
+                showToast('Please enter a job URL', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('import-btn');
+            const box = document.getElementById('url-import-box');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div>';
+            box.classList.add('loading');
+
             try {
-                const response = await fetch(`${API_URL}/api/jobs/${jobId}`);
-                const job = await response.json();
-                document.getElementById('job-modal-title').textContent = 'Edit Job';
-                document.getElementById('job-id').value = job.id;
-                document.getElementById('job-company').value = job.company || '';
-                document.getElementById('job-position').value = job.position || '';
-                document.getElementById('job-location').value = job.location || '';
-                document.getElementById('job-status').value = job.status || 'wishlist';
-                document.getElementById('job-salary-min').value = job.salary_min || '';
-                document.getElementById('job-salary-max').value = job.salary_max || '';
-                document.getElementById('job-url').value = job.job_url || '';
-                document.getElementById('job-notes').value = job.notes || '';
-                openModal('job-modal');
+                const response = await fetch(`${API_URL}/api/ats/extract-from-url`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to extract job details');
+                }
+
+                const data = await response.json();
+                
+                // Fill in the form
+                if (data.company) document.getElementById('job-company').value = data.company;
+                if (data.position) document.getElementById('job-position').value = data.position;
+                if (data.location) document.getElementById('job-location').value = data.location;
+                if (data.salary_min) document.getElementById('job-salary-min').value = data.salary_min;
+                if (data.salary_max) document.getElementById('job-salary-max').value = data.salary_max;
+                if (data.job_description) document.getElementById('job-description').value = data.job_description;
+                document.getElementById('job-url').value = url;
+
+                showToast('Job details imported successfully!', 'success');
             } catch (error) {
-                console.error('Error loading job:', error);
-                showToast('Failed to load job details', 'error');
+                console.error('Error importing from URL:', error);
+                showToast(error.message || 'Failed to import job details', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Import';
+                box.classList.remove('loading');
             }
         }
 
         async function saveJob() {
-            const jobId = document.getElementById('job-id').value;
+            const id = document.getElementById('job-id').value;
             const company = document.getElementById('job-company').value.trim();
             const position = document.getElementById('job-position').value.trim();
+            
             if (!company || !position) {
                 showToast('Company and Position are required', 'error');
                 return;
             }
+
             const jobData = {
                 company,
                 position,
                 location: document.getElementById('job-location').value.trim() || null,
-                status: document.getElementById('job-status').value,
+                job_url: document.getElementById('job-url').value.trim() || null,
                 salary_min: parseInt(document.getElementById('job-salary-min').value) || null,
                 salary_max: parseInt(document.getElementById('job-salary-max').value) || null,
-                job_url: document.getElementById('job-url').value.trim() || null,
-                notes: document.getElementById('job-notes').value.trim() || null
+                status: document.getElementById('job-status').value,
+                notes: document.getElementById('job-notes').value.trim() || null,
+                job_description: document.getElementById('job-description').value.trim() || null
             };
+
             try {
-                const url = jobId ? `${API_URL}/api/jobs/${jobId}` : `${API_URL}/api/jobs`;
-                const method = jobId ? 'PUT' : 'POST';
+                const url = id ? `${API_URL}/api/jobs/${id}` : `${API_URL}/api/jobs`;
+                const method = id ? 'PUT' : 'POST';
+                
                 const response = await fetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(jobData)
                 });
+
                 if (!response.ok) throw new Error('Failed to save job');
+
                 closeModal('job-modal');
-                showToast(jobId ? 'Job updated successfully' : 'Job added successfully', 'success');
-                loadDashboard();
+                showToast(id ? 'Job updated!' : 'Job added!', 'success');
                 loadJobs();
+                loadDashboard();
             } catch (error) {
                 console.error('Error saving job:', error);
                 showToast('Failed to save job', 'error');
             }
         }
 
-        async function deleteJob(jobId) {
-            if (!confirm('Are you sure you want to delete this job?')) return;
+        async function editJob(id) {
             try {
-                const response = await fetch(`${API_URL}/api/jobs/${jobId}`, { method: 'DELETE' });
-                if (!response.ok) throw new Error('Failed to delete job');
-                showToast('Job deleted successfully', 'success');
-                loadDashboard();
+                const response = await fetch(`${API_URL}/api/jobs/${id}`);
+                const job = await response.json();
+                
+                document.getElementById('job-modal-title').textContent = 'Edit Job';
+                document.getElementById('job-id').value = job.id;
+                document.getElementById('job-company').value = job.company || '';
+                document.getElementById('job-position').value = job.position || '';
+                document.getElementById('job-location').value = job.location || '';
+                document.getElementById('job-url').value = job.job_url || '';
+                document.getElementById('job-salary-min').value = job.salary_min || '';
+                document.getElementById('job-salary-max').value = job.salary_max || '';
+                document.getElementById('job-status').value = job.status || 'wishlist';
+                document.getElementById('job-notes').value = job.notes || '';
+                document.getElementById('job-description').value = job.job_description || '';
+                
+                openModal('job-modal');
+            } catch (error) {
+                console.error('Error loading job:', error);
+                showToast('Failed to load job', 'error');
+            }
+        }
+
+        async function deleteJob(id) {
+            if (!confirm('Are you sure you want to delete this job?')) return;
+            
+            try {
+                await fetch(`${API_URL}/api/jobs/${id}`, { method: 'DELETE' });
+                showToast('Job deleted', 'success');
                 loadJobs();
+                loadDashboard();
             } catch (error) {
                 console.error('Error deleting job:', error);
                 showToast('Failed to delete job', 'error');
+            }
+        }
+
+        async function updateJobStatus(jobId, newStatus) {
+            const selectElement = document.querySelector(`select[data-job-id="${jobId}"]`);
+            const originalClass = selectElement.className;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/jobs/${jobId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) throw new Error('Failed to update status');
+
+                // Update the select styling to match new status
+                selectElement.className = `status-select status-${newStatus}`;
+                
+                showToast(`Status updated to ${newStatus}`, 'success');
+                
+                // Refresh dashboard stats
+                loadDashboard();
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showToast('Failed to update status', 'error');
+                // Revert the select to original value
+                loadJobs();
             }
         }
 
@@ -1387,83 +1770,57 @@
             try {
                 const response = await fetch(`${API_URL}/api/resumes`);
                 const resumes = await response.json();
-                const container = document.getElementById('resumes-list');
+                
+                const tbody = document.getElementById('resumes-list');
+                
                 if (resumes.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3>No resumes uploaded yet</h3><p>Upload a PDF or DOCX file above to get started</p></div>`;
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No resumes uploaded yet</td></tr>';
                     return;
                 }
-                container.innerHTML = `<table class="jobs-table"><thead><tr><th>Name</th><th>Type</th><th>ATS Score</th><th>Upload Date</th><th>Actions</th></tr></thead><tbody>${resumes.map(resume => `<tr>
-                    <td><strong>${escapeHtml(resume.filename)}</strong></td>
-                    <td><span class="status-badge">${(resume.file_type || 'file').toUpperCase()}</span></td>
-                    <td>${resume.ats_score ? `<span class="status-badge status-applied">${resume.ats_score}/100</span>` : '-'}</td>
-                    <td>${resume.upload_date ? new Date(resume.upload_date).toLocaleDateString() : '-'}</td>
-                    <td>
-                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="viewResumeContent(${resume.id})">View</button>
-                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="useResumeForATS(${resume.id})">Use for ATS</button>
-                    </td>
-                </tr>`).join('')}</tbody></table>`;
+                
+                tbody.innerHTML = resumes.map(resume => `
+                    <tr>
+                        <td><strong>${escapeHtml(resume.filename)}</strong></td>
+                        <td><span class="type-badge ${resume.file_type || 'txt'}">${(resume.file_type || 'txt').toUpperCase()}</span></td>
+                        <td>${formatDate(resume.upload_date)}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-secondary btn-sm" onclick="viewResumeContent(${resume.id})">View</button>
+                            <button class="btn btn-primary btn-sm" onclick="useResumeForATS(${resume.id})">Use for ATS</button>
+                        </td>
+                    </tr>
+                `).join('');
             } catch (error) {
                 console.error('Error loading resumes:', error);
-                document.getElementById('resumes-list').innerHTML = '<p style="color: var(--danger);">Failed to load resumes</p>';
             }
         }
 
-        // File Upload Handling
         function handleFileSelect(event) {
             const file = event.target.files[0];
-            if (file) {
-                uploadResume(file);
-            }
+            if (file) uploadResume(file);
         }
 
-        // Setup drag and drop
-        document.addEventListener('DOMContentLoaded', function() {
-            const uploadArea = document.getElementById('upload-area');
-            if (uploadArea) {
-                uploadArea.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    uploadArea.classList.add('drag-over');
-                });
-                uploadArea.addEventListener('dragleave', () => {
-                    uploadArea.classList.remove('drag-over');
-                });
-                uploadArea.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    uploadArea.classList.remove('drag-over');
-                    const file = e.dataTransfer.files[0];
-                    if (file) {
-                        uploadResume(file);
-                    }
-                });
-            }
-        });
-
         async function uploadResume(file) {
-            // Validate file type
             const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
             const validExtensions = ['.pdf', '.docx', '.txt'];
-            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
             
-            if (!validExtensions.includes(fileExt)) {
+            const extension = '.' + file.name.split('.').pop().toLowerCase();
+            if (!validExtensions.includes(extension)) {
                 showToast('Please upload a PDF, DOCX, or TXT file', 'error');
                 return;
             }
 
-            // Validate file size (10MB)
             if (file.size > 10 * 1024 * 1024) {
-                showToast('File is too large. Maximum size is 10MB', 'error');
+                showToast('File too large. Maximum size is 10MB', 'error');
                 return;
             }
 
-            // Show progress
-            document.getElementById('upload-area').style.display = 'none';
-            document.getElementById('upload-progress').style.display = 'block';
-            document.getElementById('upload-status').textContent = `Uploading ${file.name}...`;
-
-            const formData = new FormData();
-            formData.append('file', file);
+            const progress = document.getElementById('upload-progress');
+            progress.style.display = 'block';
 
             try {
+                const formData = new FormData();
+                formData.append('file', file);
+
                 const response = await fetch(`${API_URL}/api/resumes/upload`, {
                     method: 'POST',
                     body: formData
@@ -1475,56 +1832,27 @@
                 }
 
                 const result = await response.json();
-                showToast(`Resume uploaded successfully! Extracted ${result.content_length} characters.`, 'success');
+                showToast('Resume uploaded successfully!', 'success');
                 loadResumes();
             } catch (error) {
                 console.error('Upload error:', error);
                 showToast(error.message || 'Failed to upload resume', 'error');
             } finally {
-                // Reset upload area
-                document.getElementById('upload-area').style.display = 'block';
-                document.getElementById('upload-progress').style.display = 'none';
-                document.getElementById('resume-file-input').value = '';
+                progress.style.display = 'none';
+                document.getElementById('resume-file').value = '';
             }
         }
 
         async function viewResumeContent(resumeId) {
             try {
                 const response = await fetch(`${API_URL}/api/resumes/${resumeId}/content`);
-                if (!response.ok) throw new Error('Failed to fetch content');
                 const data = await response.json();
                 
-                // Create a modal to show content
-                const modalHtml = `
-                    <div class="modal-overlay" id="content-modal" onclick="if(event.target.id === 'content-modal') closeModal('content-modal')">
-                        <div class="modal" style="max-width: 800px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column;">
-                            <div class="modal-header">
-                                <h3 class="modal-title">${escapeHtml(data.filename)}</h3>
-                                <button class="modal-close" onclick="closeModal('content-modal')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="modal-body" style="overflow-y: auto; flex: 1;">
-                                <pre style="white-space: pre-wrap; font-family: inherit; font-size: 14px; line-height: 1.6;">${escapeHtml(data.content || 'No content extracted')}</pre>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-primary" onclick="copyToClipboard(\`${escapeHtml(data.content || '').replace(/`/g, '\\`')}\`)">Copy Text</button>
-                                <button class="btn btn-secondary" onclick="closeModal('content-modal')">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Remove existing modal if any
-                const existing = document.getElementById('content-modal');
-                if (existing) existing.remove();
-                
-                document.body.insertAdjacentHTML('beforeend', modalHtml);
-                document.getElementById('content-modal').classList.add('active');
+                document.getElementById('content-modal-title').textContent = data.filename;
+                document.getElementById('content-modal-text').textContent = data.content || 'No content available';
+                openModal('content-modal');
             } catch (error) {
-                console.error('Error viewing content:', error);
+                console.error('Error:', error);
                 showToast('Failed to load resume content', 'error');
             }
         }
@@ -1535,14 +1863,19 @@
                 if (!response.ok) throw new Error('Failed to fetch content');
                 const data = await response.json();
                 
-                // Navigate to ATS page and fill in the resume
-                showPage('ats');
+                navigateTo('ats');
+                await loadSelectOptions();
                 document.getElementById('ats-resume').value = data.content || '';
                 showToast('Resume loaded into ATS analyzer', 'success');
             } catch (error) {
                 console.error('Error:', error);
                 showToast('Failed to load resume', 'error');
             }
+        }
+
+        function copyModalContent() {
+            const text = document.getElementById('content-modal-text').textContent;
+            copyToClipboard(text);
         }
 
         function copyToClipboard(text) {
@@ -1557,95 +1890,184 @@
         async function analyzeATS() {
             const resume = document.getElementById('ats-resume').value.trim();
             const jobDesc = document.getElementById('ats-job-desc').value.trim();
+            
             if (!resume || !jobDesc) {
-                showToast('Please enter both resume and job description', 'error');
+                showToast('Please provide both resume and job description', 'error');
                 return;
             }
+
             const btn = document.getElementById('analyze-btn');
             btn.disabled = true;
-            btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></div> Analyzing...';
+            btn.innerHTML = '<div class="spinner"></div> Analyzing...';
+
             try {
                 const response = await fetch(`${API_URL}/api/analyze-ats`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ resume_text: resume, job_description: jobDesc })
+                    body: JSON.stringify({
+                        resume_text: resume,
+                        job_description: jobDesc
+                    })
                 });
+
+                if (!response.ok) throw new Error('Analysis failed');
+
                 const result = await response.json();
-                if (!result.success) throw new Error(result.error || 'Analysis failed');
-                document.getElementById('ats-results').style.display = 'block';
-                const score = result.score;
-                const scoreCircle = document.getElementById('score-circle');
-                const circumference = 2 * Math.PI * 90;
-                const offset = circumference - (score / 100) * circumference;
-                scoreCircle.style.strokeDashoffset = offset;
-                if (score >= 80) scoreCircle.style.stroke = 'var(--success)';
-                else if (score >= 60) scoreCircle.style.stroke = 'var(--warning)';
-                else scoreCircle.style.stroke = 'var(--danger)';
-                document.getElementById('ats-score-value').textContent = score;
-                document.getElementById('missing-keywords').innerHTML = result.missing_keywords.map(kw => `<span class="keyword-tag">${escapeHtml(kw)}</span>`).join('');
-                document.getElementById('suggestions-list').innerHTML = result.suggestions.map(suggestion => `<li><span class="suggestion-icon">💡</span><span>${escapeHtml(suggestion)}</span></li>`).join('');
-                showToast('Analysis complete!', 'success');
+                displayATSResults(result);
             } catch (error) {
-                console.error('Error analyzing:', error);
-                showToast('Failed to analyze. Make sure the API server is running.', 'error');
+                console.error('Error:', error);
+                showToast('ATS analysis failed', 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> Analyze Match`;
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg> Analyze Match`;
             }
         }
 
-        // Cover Letter Generator
+        function displayATSResults(result) {
+            document.getElementById('ats-results').style.display = 'block';
+            
+            const score = result.score || 0;
+            document.getElementById('ats-score-value').textContent = score;
+            
+            const circle = document.getElementById('score-circle');
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (score / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            if (score >= 70) {
+                circle.style.stroke = 'var(--success)';
+            } else if (score >= 50) {
+                circle.style.stroke = 'var(--warning)';
+            } else {
+                circle.style.stroke = 'var(--danger)';
+            }
+            
+            const keywordsContainer = document.getElementById('missing-keywords');
+            const keywords = result.missing_keywords || [];
+            keywordsContainer.innerHTML = keywords.length 
+                ? keywords.map(k => `<span class="keyword-tag">${escapeHtml(k)}</span>`).join('')
+                : '<p style="color: var(--text-muted);">No critical missing keywords found!</p>';
+            
+            const suggestionsList = document.getElementById('suggestions-list');
+            const suggestions = result.suggestions || [];
+            suggestionsList.innerHTML = suggestions.length
+                ? suggestions.map(s => `<li>${escapeHtml(s)}</li>`).join('')
+                : '<li>Your resume looks good!</li>';
+        }
+
+        // Cover Letter
         async function generateCoverLetter() {
             const company = document.getElementById('cl-company').value.trim();
             const resume = document.getElementById('cl-resume').value.trim();
             const jobDesc = document.getElementById('cl-job-desc').value.trim();
+            const tone = document.querySelector('.tone-option.selected')?.dataset.tone || 'professional';
+            
             if (!company || !resume || !jobDesc) {
-                showToast('Please fill in all fields', 'error');
+                showToast('Please fill in company, resume, and job description', 'error');
                 return;
             }
+
             const btn = document.getElementById('generate-cl-btn');
             btn.disabled = true;
-            btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></div> Generating...';
+            btn.innerHTML = '<div class="spinner"></div> Generating...';
+
             try {
                 const response = await fetch(`${API_URL}/api/generate-cover-letter`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ resume_text: resume, job_description: jobDesc, company_name: company, tone: selectedTone })
+                    body: JSON.stringify({
+                        resume_text: resume,
+                        job_description: jobDesc,
+                        company_name: company,
+                        tone: tone
+                    })
                 });
+
+                if (!response.ok) throw new Error('Generation failed');
+
                 const result = await response.json();
-                if (!result.success) throw new Error(result.error || 'Generation failed');
                 document.getElementById('cl-results').style.display = 'block';
                 document.getElementById('cl-preview').textContent = result.cover_letter;
-                showToast('Cover letter generated!', 'success');
             } catch (error) {
-                console.error('Error generating:', error);
-                showToast('Failed to generate. Make sure the API server is running.', 'error');
+                console.error('Error:', error);
+                showToast('Cover letter generation failed', 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg> Generate Cover Letter`;
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg> Generate Cover Letter`;
             }
         }
 
         function copyCoverLetter() {
             const text = document.getElementById('cl-preview').textContent;
-            navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!', 'success')).catch(() => showToast('Failed to copy', 'error'));
+            copyToClipboard(text);
+        }
+
+        // Tone Options
+        function initToneOptions() {
+            document.querySelectorAll('.tone-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.tone-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        // Drag and Drop
+        function initDragDrop() {
+            const uploadArea = document.getElementById('upload-area');
+            if (!uploadArea) return;
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => uploadArea.classList.add('drag-over'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('drag-over'), false);
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length) uploadResume(files[0]);
+            }, false);
         }
 
         // Modal helpers
         function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
-        // Toast notifications
+        function initModalClose() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(modal => modal.classList.remove('active'));
+            });
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
+            });
+        }
+
+        // Toast
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+            toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+            setTimeout(() => toast.remove(), 4000);
         }
 
-        // Utility
+        // Utilities
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
@@ -1653,15 +2075,10 @@
             return div.innerHTML;
         }
 
-        // Close modals on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(modal => modal.classList.remove('active'));
-        });
-
-        // Close modals on overlay click
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
-        });
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
     </script>
 </body>
 </html>
