@@ -65,7 +65,7 @@ def startup():
     db.initialize_schema()
 
 
-@app.get("/")
+@app.get("/api")
 def root():
     """Health check endpoint"""
     return {
