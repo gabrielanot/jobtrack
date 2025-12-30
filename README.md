@@ -4,8 +4,6 @@
 
 Track job applications, analyze your resume against job descriptions, and generate tailored cover letters - all in one place.
 
-![JobTrack Dashboard](docs/screenshot-dashboard.png)
-
 ---
 
 ## ✨ Features
@@ -20,11 +18,7 @@ Track job applications, analyze your resume against job descriptions, and genera
 
 ## 🚀 Quick Start
 
-### Option 1: Use the Hosted Version (Easiest)
-
-> Coming soon! We're setting up a hosted version so you can use JobTrack without installing anything.
-
-### Option 2: Run on Your Computer
+### Run on Your Computer
 
 #### What You'll Need
 
@@ -98,7 +92,7 @@ Yes! Everything runs on your computer. Your resumes and job data are stored loca
 Anthropic offers free credits when you sign up. For typical job searching, this should last a while. After that, it's pay-as-you-go (usually a few cents per analysis).
 
 ### The ATS score seems low - is that bad?
-Not necessarily! The score shows keyword match percentage. Even 60-70% can be good. Focus on the "missing keywords" and suggestions to improve.
+Not necessarily! The score shows keyword match percentage. Even 60-70% can be good, but the advise is to rech 85%. Focus on the "missing keywords" and suggestions to improve.
 
 ### Can I use this offline?
 Job tracking and resume storage work offline. AI features (ATS analysis, cover letter generation) require internet.
