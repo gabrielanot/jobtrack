@@ -2,74 +2,102 @@
 chcp 65001 >nul
 setlocal EnableDelayedExpansion
 
+echo.
 echo ==========================================
 echo     JobTrack - AI Job Application Tracker
 echo ==========================================
 echo.
 
-:: Check if .env file exists and has a VALID API key
-set "HAS_KEY=0"
-if exist .env (
-    for /f "tokens=1,* delims==" %%a in (.env) do (
-        if "%%a"=="ANTHROPIC_API_KEY" (
-            set "KEY_VALUE=%%b"
-            if defined KEY_VALUE (
-                echo %%b | findstr /B "sk-ant" >nul 2>&1
-                if !errorlevel! equ 0 (
-                    set "HAS_KEY=1"
-                    echo [OK] Found valid API key in .env
-                )
-            )
-        )
+:: Check if this is first run (no .env or no mode set)
+set "NEED_SETUP=0"
+if not exist .env (
+    set "NEED_SETUP=1"
+) else (
+    findstr /C:"JOBTRACK_AI_MODE=" .env >nul 2>&1
+    if !errorlevel! neq 0 (
+        set "NEED_SETUP=1"
     )
 )
 
-:: If no valid API key, prompt the user
-if "!HAS_KEY!"=="0" (
-    echo.
+:: First time setup
+if "!NEED_SETUP!"=="1" (
     echo ============================================
-    echo   FIRST TIME SETUP - API Key Required
-    echo ============================================
-    echo.
-    echo To use AI features, you need an Anthropic API key.
-    echo.
-    echo 1. Go to: https://console.anthropic.com/settings/keys
-    echo 2. Sign in or create an account
-    echo 3. Create a new API key
-    echo 4. Copy it - starts with sk-ant-api03-...
-    echo.
+    echo   FIRST TIME SETUP
     echo ============================================
     echo.
-    set /p "API_KEY=Paste your API key here: "
+    echo Choose your AI mode:
+    echo.
+    echo   [1] FREE - Basic keyword matching
+    echo       No setup required, works offline
+    echo       Good for: Quick ATS score estimates
+    echo.
+    echo   [2] FREE + OLLAMA - Local AI ^(Recommended^)
+    echo       Requires: Ollama installed ^(free^)
+    echo       Good for: Full AI features, 100%% free
+    echo.
+    echo   [3] CLAUDE API - Best quality ^(Paid^)
+    echo       Requires: Anthropic API key
+    echo       Good for: Best results, ~$0.01/analysis
+    echo.
+    echo ============================================
+    echo.
     
-    if defined API_KEY (
-        :: Validate key format
-        echo !API_KEY! | findstr /B "sk-ant" >nul 2>&1
-        if !errorlevel! equ 0 (
-            :: Create .env file
-            echo ANTHROPIC_API_KEY=!API_KEY!> .env
+    set /p "MODE_CHOICE=Enter choice (1, 2, or 3): "
+    
+    if "!MODE_CHOICE!"=="1" (
+        echo JOBTRACK_AI_MODE=free> .env
+        echo.
+        echo [OK] Free mode selected - basic keyword matching
+        echo.
+    ) else if "!MODE_CHOICE!"=="2" (
+        echo JOBTRACK_AI_MODE=ollama> .env
+        echo.
+        echo [OK] Ollama mode selected
+        echo.
+        echo --------------------------------------------
+        echo To use Ollama:
+        echo   1. Download from: https://ollama.ai
+        echo   2. Install and run Ollama
+        echo   3. Open a terminal and run: ollama pull llama3.2
+        echo   4. Keep Ollama running in background
+        echo --------------------------------------------
+        echo.
+        pause
+    ) else if "!MODE_CHOICE!"=="3" (
+        echo.
+        echo You need an Anthropic API key.
+        echo Get one at: https://console.anthropic.com/settings/keys
+        echo.
+        set /p "API_KEY=Paste your API key (starts with sk-ant-): "
+        
+        if defined API_KEY (
+            echo JOBTRACK_AI_MODE=claude> .env
+            echo ANTHROPIC_API_KEY=!API_KEY!>> .env
             echo.
-            echo [OK] API key saved successfully!
+            echo [OK] Claude mode configured!
             echo.
         ) else (
             echo.
-            echo [WARNING] Key doesn't look valid - should start with sk-ant
-            echo           Saving anyway - you can edit .env later if needed.
-            echo ANTHROPIC_API_KEY=!API_KEY!> .env
+            echo [WARNING] No API key entered, falling back to free mode
+            echo JOBTRACK_AI_MODE=free> .env
             echo.
         )
     ) else (
         echo.
-        echo [SKIP] No API key entered.
-        echo        AI features will not work until you add one.
-        echo        Edit the .env file to add: ANTHROPIC_API_KEY=your-key
+        echo [INFO] Invalid choice, using free mode
+        echo JOBTRACK_AI_MODE=free> .env
         echo.
-        pause
     )
 )
 
-:: Check if Python is installed
+:: Show current mode
 echo.
+for /f "tokens=1,* delims==" %%a in ('findstr /C:"JOBTRACK_AI_MODE=" .env 2^>nul') do (
+    echo Current AI Mode: %%b
+)
+echo.
+
+:: Check if Python is installed
 echo [CHECK] Looking for Python...
 python --version >nul 2>&1
 if errorlevel 1 (
@@ -110,6 +138,8 @@ echo.
 echo Open your browser to: http://localhost:8000
 echo.
 echo To stop: Close this window or press Ctrl+C
+echo.
+echo To change AI mode: Delete .env and restart
 echo ==========================================
 echo.
 

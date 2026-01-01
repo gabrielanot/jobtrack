@@ -21,13 +21,26 @@ from .models import (
     CoverLetterRequest, CoverLetterResponse,
     JobExtractRequest, JobExtractFromURLRequest, JobExtractResponse
 )
-from .ats_service import (
-    analyze_resume_ats,
-    generate_cover_letter,
-    extract_job_details,
-    fetch_and_extract_from_url
-)
+from .config import AI_MODE, get_mode_description
 from .file_service import parse_resume_file
+
+# Import the appropriate ATS service based on mode
+if AI_MODE == "claude":
+    from .ats_service import (
+        analyze_resume_ats,
+        generate_cover_letter,
+        extract_job_details,
+        fetch_and_extract_from_url
+    )
+    print(f"✓ AI Mode: Claude API")
+else:
+    from .ats_service_free import (
+        analyze_resume_ats,
+        generate_cover_letter,
+        extract_job_details,
+        fetch_and_extract_from_url
+    )
+    print(f"✓ AI Mode: {get_mode_description()}")
 
 # Directory to store uploaded resumes
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "uploads", "resumes")
@@ -44,7 +57,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="JobTrack API",
     description="API for tracking job applications with AI-powered features",
-    version="1.1.0",
+    version="1.2.0",
     lifespan=lifespan
 )
 
@@ -72,7 +85,9 @@ def root():
     """Health check endpoint"""
     return {
         "message": "JobTrack API is running",
-        "version": "1.1.0",
+        "version": "1.2.0",
+        "ai_mode": AI_MODE,
+        "ai_mode_description": get_mode_description(),
         "docs": "/docs"
     }
 
@@ -222,7 +237,9 @@ def get_stats():
         return {
             "total_jobs": total,
             "by_status": status_counts,
-            "recent_activity": recent_activity
+            "recent_activity": recent_activity,
+            "ai_mode": AI_MODE,
+            "ai_mode_description": get_mode_description()
         }
 
 
