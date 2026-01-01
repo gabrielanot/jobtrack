@@ -24,3 +24,7 @@ Thumbs.db
 
 # Testing
 .pytest_cache/
+
+# Database
+jobtrack.db
+*.db
