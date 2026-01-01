@@ -2,6 +2,7 @@
 Pydantic models for request/response validation
 """
 
+from pydantic import ConfigDict
 from typing import Optional, List
 from datetime import date, datetime
 from pydantic import BaseModel, Field
@@ -47,8 +48,7 @@ class Job(JobBase):
     created_at: datetime
     updated_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ContactBase(BaseModel):
@@ -69,8 +69,7 @@ class Contact(ContactBase):
     """Complete contact model"""
     id: int
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class InterviewBase(BaseModel):
@@ -90,8 +89,7 @@ class Interview(InterviewBase):
     """Complete interview model"""
     id: int
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ResumeBase(BaseModel):
@@ -126,8 +124,7 @@ class Resume(ResumeBase):
     ats_score: Optional[int] = None
     ats_analysis: Optional[str] = None
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ATS Analysis Models

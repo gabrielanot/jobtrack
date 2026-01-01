@@ -36,7 +36,7 @@ def client():
 
 def test_root(client):
     """Test root endpoint"""
-    response = client.get("/")
+    response = client.get("/api")
     assert response.status_code == 200
     assert "JobTrack API" in response.json()["message"]
 

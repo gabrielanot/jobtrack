@@ -1,30 +1,27 @@
-# 🎯 JobTrack
+# 💼 JobTrack
 
 **Your AI-powered job application tracker**
 
 Track job applications, analyze your resume against job descriptions, and generate tailored cover letters - all in one place.
 
-![JobTrack Dashboard](docs/screenshot-dashboard.png)
-
 ---
 
 ## ✨ Features
 
-- **📋 Job Tracking** - Keep all your applications organized in one place
-- **📄 Resume Upload** - Upload PDF or Word documents, we extract the text automatically
-- **🔍 ATS Analysis** - See how well your resume matches a job description (0-100 score)
-- **✉️ Cover Letter Generator** - Create personalized cover letters with AI
-- **🌙 Beautiful Dark Theme** - Easy on the eyes during those late-night job searches
-
----
+- **📋 Job Tracking** - Track applications through different stages with inline status editing
+- **🔗 URL Import** - Paste a job URL to auto-extract company, position, location, and description
+- **📄 Resume Management** - Upload PDF, DOCX, or TXT resumes with automatic text extraction
+- **🎯 ATS Analyzer** - Check how well your resume matches a job description
+- **✉️ Cover Letter Generator** - Generate personalized cover letters with AI
+- **📊 Dashboard** - Track your progress with visual statistics
 
 ## 🚀 Quick Start
 
-### Option 1: Use the Hosted Version (Easiest)
-
-> Coming soon! We're setting up a hosted version so you can use JobTrack without installing anything.
-
-### Option 2: Run on Your Computer
+### Windows
+```
+Double-click start.bat
+```
+### Run on Your Computer
 
 #### What You'll Need
 
@@ -98,7 +95,7 @@ Yes! Everything runs on your computer. Your resumes and job data are stored loca
 Anthropic offers free credits when you sign up. For typical job searching, this should last a while. After that, it's pay-as-you-go (usually a few cents per analysis).
 
 ### The ATS score seems low - is that bad?
-Not necessarily! The score shows keyword match percentage. Even 60-70% can be good. Focus on the "missing keywords" and suggestions to improve.
+Not necessarily! The score shows keyword match percentage. Even 60-70% can be good, but the advise is to rech 85%. Focus on the "missing keywords" and suggestions to improve.
 
 ### Can I use this offline?
 Job tracking and resume storage work offline. AI features (ATS analysis, cover letter generation) require internet.
@@ -111,89 +108,124 @@ Job tracking and resume storage work offline. AI features (ATS analysis, cover l
 
 ---
 
-## 🛠️ For Developers
-
-<details>
-<summary>Click to expand developer setup</summary>
-
-### Manual Setup
-
+### Mac/Linux
 ```bash
-# Clone the repository
-git clone https://github.com/gabrielajoy/jobtrack.git
-cd jobtrack
-
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment
-cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
-
-# Run the server
-uvicorn backend.app.main:app --reload
+chmod +x start.sh
+./start.sh
 ```
 
-### Project Structure
+Then open http://localhost:8000
+
+## 💰 Free vs Paid Mode
+
+JobTrack offers two modes to accommodate different needs:
+
+### 🆓 Free Mode (Default)
+No API costs! Uses:
+- **ATS Analysis**: Smart keyword matching algorithm
+- **Cover Letters**: Ollama (free, runs locally)
+- **URL Import**: HTML parsing with regex
+
+**Setup for Cover Letters (Optional):**
+1. Install Ollama: https://ollama.ai
+2. Run: `ollama pull llama3.2`
+3. That's it!
+
+### 💳 Claude Mode (Paid)
+Higher quality AI features using Claude API:
+- More nuanced ATS analysis
+- Better cover letter generation  
+- Smarter URL extraction
+
+**Setup:**
+1. Get API key: https://console.anthropic.com/
+2. Edit `backend/app/config.py`:
+   ```python
+   AI_MODE = "claude"
+   ```
+3. Create `.env` file:
+   ```
+   ANTHROPIC_API_KEY=your-key-here
+   ```
+
+## 📁 Project Structure
 
 ```
 jobtrack/
 ├── backend/
 │   └── app/
-│       ├── main.py          # FastAPI endpoints
-│       ├── database.py      # SQLite setup
-│       ├── models.py        # Pydantic models
-│       ├── ats_service.py   # AI analysis
-│       └── file_service.py  # PDF/DOCX parsing
+│       ├── main.py           # API endpoints
+│       ├── database.py       # SQLite database
+│       ├── models.py         # Data models
+│       ├── config.py         # AI mode config
+│       ├── ats_service.py    # Claude AI service (paid)
+│       ├── ats_service_free.py  # Free alternatives
+│       └── file_service.py   # Resume parsing
 ├── frontend/
-│   └── index.html           # Single-page app
-├── tests/                   # Pytest tests
-├── start.bat               # Windows launcher
-├── start.sh                # Mac/Linux launcher
+│   └── index.html           # Web interface
+├── start.bat                # Windows launcher
+├── start.sh                 # Mac/Linux launcher
 └── requirements.txt
 ```
 
-### API Endpoints
+## 🛠️ Manual Setup
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/jobs` | List all jobs |
-| POST | `/api/jobs` | Create a job |
-| PUT | `/api/jobs/{id}` | Update a job |
-| DELETE | `/api/jobs/{id}` | Delete a job |
-| POST | `/api/resumes/upload` | Upload resume file |
-| GET | `/api/resumes/{id}/content` | Get resume text |
-| POST | `/api/analyze-ats` | Analyze resume vs job |
-| POST | `/api/generate-cover-letter` | Generate cover letter |
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/gabrielanot/jobtrack.git
+   cd jobtrack
+   ```
 
-### Running Tests
+2. **Create virtual environment**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Mac/Linux
+   .venv\Scripts\activate     # Windows
+   ```
 
-```bash
-pytest tests/ -v
-```
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-</details>
+4. **Run the application**
+   ```bash
+   python -m uvicorn backend.app.main:app --reload
+   ```
 
----
+5. **Open** http://localhost:8000
 
-## 📝 Feedback
+## 📝 API Endpoints
 
-This is an **alpha version**! We'd love your feedback:
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/jobs` | GET, POST | List/create jobs |
+| `/api/jobs/{id}` | GET, PUT, DELETE | Get/update/delete job |
+| `/api/resumes` | GET, POST | List/create resumes |
+| `/api/resumes/upload` | POST | Upload resume file |
+| `/api/resumes/{id}/content` | GET | Get resume text |
+| `/api/analyze-ats` | POST | Analyze resume vs job |
+| `/api/generate-cover-letter` | POST | Generate cover letter |
+| `/api/ats/extract-from-url` | POST | Extract job from URL |
+| `/api/info` | GET | Get API/AI mode info |
 
-- 🐛 [Report bugs](https://github.com/gabrielajoy/jobtrack/issues)
-- 💡 [Suggest features](https://github.com/gabrielajoy/jobtrack/issues)
-- ⭐ Star the repo if you find it useful!
+## 🤝 Contributing
 
----
+This is an open-source learning project! Contributions welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## 📄 License
 
-MIT License - feel free to use, modify, and share!
+MIT License - feel free to use and modify!
+
+## 🐛 Issues & Feedback
+
+Found a bug or have a suggestion? [Open an issue](https://github.com/gabrielanot/jobtrack/issues)
 
 ---
 
-Made with ❤️ to help job seekers land their dream jobs.
+Made with ❤️ for job seekers everywhere
