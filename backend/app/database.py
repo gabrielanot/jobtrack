@@ -1,14 +1,14 @@
 """
 Database initialization and connection management
 """
-
+import os
 import sqlite3
 
 
 class Database:
     """Handle SQLite database operations"""
     
-    def __init__(self, db_path: str = "jobtrack.db"):
+    def __init__(self, db_path: str):
         self.db_path = db_path
         self._schema_initialized = False
     
@@ -100,7 +100,9 @@ class Database:
 
 
 # Global database instance
-db = Database()
+# Use environment variable for database path, default to "jobtrack.db"
+DB_PATH = os.getenv("DATABASE_PATH", "jobtrack.db")
+db = Database(DB_PATH)
 
 
 def get_db():

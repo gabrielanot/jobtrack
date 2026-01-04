@@ -49,6 +49,42 @@ Double-click start.bat
 4. Enter your API key when asked (first time only)
 5. Open http://localhost:8000 in your browser
 
+### Run with Docker
+
+This is the recommended way to run JobTrack if you have Docker installed, as it simplifies setup and dependency management.
+
+#### Prerequisites
+
+1.  **Docker Desktop**
+    -   Download and install from: https://www.docker.com/products/docker-desktop/
+
+#### Step-by-Step Setup
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/gabrielanot/jobtrack.git
+    cd jobtrack
+    ```
+
+2.  **Create a `.env` file**
+    In the root of the project, create a file named `.env` and add your Anthropic API key to it:
+    ```
+    ANTHROPIC_API_KEY=your-api-key-here
+    ```
+    You can get one at: https://console.anthropic.com/ (free credits available).
+
+3.  **Build and run the application**
+    From the project root directory, run the following command to build the Docker image and start the container in detached mode:
+    ```bash
+    docker-compose up --build -d
+    ```
+
+4.  **Access the application**
+    Once the container is running, open your web browser and go to:
+    ```
+    http://localhost:8000
+    ```
+
 ---
 
 ## 📖 How to Use
