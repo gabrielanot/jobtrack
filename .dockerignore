@@ -1,0 +1,43 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+docs/
+
+# Scripts
+start.bat
+start.sh
+setup_jobtrack.py
+scripts/
+
+# Tests
+tests/
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Database
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.venv/
+venv/
+
+# Docker
+.dockerignore
+docker-compose.yml
+Dockerfile
